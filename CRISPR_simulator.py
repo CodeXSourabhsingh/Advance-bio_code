@@ -69,7 +69,7 @@ if run_button:
                     if len(target) < 20:
                         continue
                     
-                    # Calculate GC content of protospacer
+                    
                     gc_count = target.count('G') + target.count('C')
                     gc_content = (gc_count / 20) * 100
                     if gc_content < gc_min or gc_content > gc_max:
