@@ -5,7 +5,7 @@
 A bioinformatics tool that fetches real gene sequences from NCBI, scans both DNA strands for PAM sites, calculates gRNA mismatches, simulates Cas9 cuts, and predicts the repair pathway (NHEJ/HDR). Results are logged to MySQL and visualized in a Streamlit dashboard.
 
 ## What It Does
-
+ 
 1. **Fetches** real gene sequences from NCBI using Biopython's Entrez API.
 2. **Scans** both the forward and reverse complement strands for PAM sites (NGG, NAG, NGA, NGC).
 3. **Matches** a user-provided gRNA against each PAM site using Hamming distance.
