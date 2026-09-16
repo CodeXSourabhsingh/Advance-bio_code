@@ -35,7 +35,7 @@ if run_button:
             handle.close()
 
             if not record.get("IdList"):
-                # Fallback to general search if RefSeq fails
+               
                 handle = Entrez.esearch(db="nucleotide", term=f"{gene_name}[All Fields] AND Homo sapiens[Organism]", retmax=1)
                 record = Entrez.read(handle)
                 handle.close()
