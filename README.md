@@ -45,3 +45,7 @@ A bioinformatics tool that fetches real gene sequences from NCBI, scans both DNA
    ```bash
    git clone https://github.com/CodeXSourabhsingh/bio_code.git
    cd bio_code
+   
+## Known Issues
+
+**Windows Smart App Control:** Some Windows 11 users may see an `ImportError` for `_codonaligner` due to Smart App Control blocking Biopython's compiled files. If this happens, turn off Smart App Control in Windows Security settings, or run the script in a virtual environment. This is a Windows security issue, not a code bug.
