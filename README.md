@@ -1,17 +1,17 @@
 # 🧬 Advance-bio_code
 
-# ⚡ CRISPR Gene Editing Simulator
+## ⚡ CRISPR Gene Editing Simulator
 
-A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, scans both DNA strands for PAM sites, calculates gRNA mismatches, simulates Cas9 cuts, and predicts the repair pathway (NHEJ or HDR).
+A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, scans both DNA strands for PAM sites, calculates gRNA mismatches, simulates Cas9 cuts, and predicts the repair pathway (NHEJ or HDR) in an interactive Streamlit dashboard with integrated MySQL logging.
 
 ---
 
 ## 🎯 What It Does
-  
+
 - ✅ **Fetches** real gene sequences from NCBI using Biopython's Entrez API
 - 🔍 **Scans** both the forward and reverse complement strands for PAM sites (NGG, NAG, NGA, NGC)
 - 🎯 **Matches** a user-provided gRNA against each PAM site using Hamming distance
-- 📊 **Filters** candidate sites by GC content (default 30-70%)
+- 📊 **Filters** candidate sites by GC content (default 30–70%)
 - ⚔️ **Simulates** the Cas9 cut (3 bp upstream of PAM) and the repair pathway (NHEJ or HDR)
 - 💾 **Logs** every run to a MySQL vault (`crispr_vault`)
 - 📈 **Visualizes** the results in a Streamlit dashboard with 4 interactive charts
@@ -23,7 +23,7 @@ A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, s
 - **PAM Recognition:** Cas9 requires a PAM sequence (NGG for SpCas9) adjacent to the target
 - **gRNA Matching:** The 20-base protospacer upstream of the PAM is compared to the gRNA
   - 0 mismatches = on-target ✅
-  - 1-2 mismatches = off-target ⚠️
+  - 1–2 mismatches = off-target ⚠️
   - 3+ mismatches = ignored ❌
 - **Cut Simulation:** SpCas9 cleaves 3 bp upstream of the PAM
 - **Repair Pathways:** NHEJ (random indels, gene knockout) or HDR (precise edit with donor template)
@@ -36,8 +36,12 @@ A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, s
 |-------|-----------------|--------------|----------------|-----------|
 | HBB   | 10,106 bp       | 857          | 1              | 0.12%     |
 | VEGFA | 23,272 bp       | 4,763        | 1              | 0.02%     |
+| EGFR  | 1,575 bp        | 257          | 0              | 0%        |
+| TP53  | 32,772 bp       | 4,826        | 0              | 0%        |
 
-*Tested on HBB gRNA: `CTTGCCCCACAGGGCAGTAA` (20 bases, 60% GC content)*
+*EGFR, TP53, and KRAS returned 0 cuts because the HBB-specific gRNA does not perfectly match their sequence. This is correct behavior, not a bug.*
+
+*Tested with HBB gRNA: `CTTGCCCCACAGGGCAGTAA` (20 bases, 60% GC content)*
 
 ---
 
@@ -47,10 +51,10 @@ A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, s
 |-----------|---------|
 | **Python 3.13** | Core language |
 | **Biopython** | NCBI Entrez API integration |
-| **Pandas / NumPy** | Data processing & mismatch calculations |
-| **Matplotlib** | Interactive visualizations |
-| **Streamlit** | Dynamic dashboard with session state |
-| **MySQL** | Run logging & data persistence |
+| **Pandas / NumPy** | Data processing and mismatch calculations |
+| **Matplotlib** | Visualizations |
+| **Streamlit** | Dashboard with session state |
+| **MySQL** | Run logging and data persistence |
 
 ---
 
@@ -59,7 +63,6 @@ A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, s
 ### Prerequisites
 - Python 3.13+
 - MySQL Server (for data logging)
-- NCBI API key (free, from [NCBI](https://www.ncbi.nlm.nih.gov/account/settings/))
 
 ### Installation
 
@@ -69,66 +72,43 @@ A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, s
    cd Advance-bio_code
    ```
 
-2. **Create a virtual environment:**
+2. **Install dependencies:**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install biopython pandas numpy matplotlib streamlit mysql-connector-python
    ```
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
+3. **Create a `config.py` file:**
+   ```python
+   MYSQL_HOST = "localhost"
+   MYSQL_USER = "your_username"
+   MYSQL_PASSWORD = "your_password"
+   MYSQL_DATABASE = "crispr_vault"
    ```
 
-4. **Configure MySQL connection:**
-   - Update `config.py` or `.env` with your MySQL credentials:
-     ```python
-     DB_HOST = "localhost"
-     DB_USER = "your_username"
-     DB_PASSWORD = "your_password"
-     DB_NAME = "crispr_vault"
-     ```
-
-5. **Set your NCBI API key:**
+4. **Run the Streamlit app:**
    ```bash
-   export NCBI_API_KEY="your_ncbi_api_key"
+   streamlit run CRISPR_simulator.py
    ```
+
+5. **Open in your browser:**
+   Navigate to `http://localhost:8501`
 
 ---
 
 ## 📖 How to Use
 
-### Option 1: Command Line Interface
+The Streamlit application presents an interactive interface:
 
-```bash
-python crispr_simulator.py \
-  --gene HBB \
-  --grna "CTTGCCCCACAGGGCAGTAA" \
-  --pam_types NGG \
-  --gc_min 30 \
-  --gc_max 70 \
-  --repair NHEJ
-```
-
-**Parameters:**
-- `--gene`: Gene accession ID (e.g., `HBB`, `VEGFA`)
-- `--grna`: 20-base guide RNA sequence
-- `--pam_types`: PAM sites to scan (NGG, NAG, NGA, NGC)
-- `--gc_min`, `--gc_max`: GC content filter range (%)
-- `--repair`: Repair pathway (NHEJ or HDR)
-
-### Option 2: Streamlit Dashboard (Interactive)
-
-```bash
-streamlit run app.py
-```
-
-**Features:**
-- 🎨 Real-time sequence visualization
-- 📊 Interactive PAM site location plots
-- 📈 Mismatch distribution charts
-- 💾 Export results as CSV/JSON
-- 🔍 Filter and sort results dynamically
+1. **Enter gene name(s):** Input a single gene (e.g., `HBB`) or comma-separated list (e.g., `HBB, VEGFA, EGFR`)
+2. **Select PAM sequence:** Choose from NGG, NAG, NGA, or NGC
+3. **Enter gRNA:** Provide a 20-base guide RNA sequence (e.g., `CTTGCCCCACAGGGCAGTAA`)
+4. **Adjust GC content filter:** Use the slider to set the min/max GC content range (default 30–70%)
+5. **Click "Run simulation":** The app fetches sequences, scans for PAM sites, calculates mismatches, and logs results to MySQL
+6. **View results:**
+   - Metrics: Total PAMs scanned and on-target cuts
+   - 4 interactive Matplotlib charts
+   - Complete results dataframe
+   - CSV download button
 
 ---
 
@@ -138,82 +118,87 @@ streamlit run app.py
 
 | Column | Description |
 |--------|-------------|
-| `Position` | Location in the gene sequence |
-| `PAM_Sequence` | Actual PAM found (NGG, NAG, etc.) |
-| `Strand` | Forward (+) or Reverse (-) |
-| `Mismatches` | Hamming distance to gRNA (0 = perfect match) |
-| `GC_Content` | Percentage of G/C bases (30-70% optimal) |
-| `Repair_Type` | Predicted repair pathway (NHEJ or HDR) |
-| `Off_Target_Risk` | Estimated off-target activity score |
+| `gene_name` | Gene symbol |
+| `strand` | Forward (+) or reverse (−) |
+| `pam_position` | Position of PAM in sequence (bp) |
+| `target` | 20-base protospacer |
+| `gc_content` | GC percentage of protospacer |
+| `mismatches` | Hamming distance to gRNA (0 = perfect match) |
+| `match_type` | On-target, Off-target, or No Cuts |
+| `cut_position` | Position 3 bp upstream of PAM (on-target only) |
+| `repair_type` | NHEJ or HDR (randomly assigned on-target) |
 
 ### Visualizations Generated:
 
-1. **PAM Site Distribution** — Histogram of PAM locations
-2. **Mismatch Heatmap** — gRNA alignment quality
-3. **GC Content Analysis** — Distribution across binding sites
-4. **Efficiency Metrics** — On-target vs off-target ratios
+1. **PAMs vs Cuts** — Bar chart showing total PAM sites scanned vs on-target cuts
+2. **Mismatch Distribution** — Histogram of mismatch counts across all PAM sites
+3. **Cut Position Map** — Scatter plot of on-target cut positions vs mismatches
+4. **Strand Distribution** — Pie chart showing cut distribution between forward and reverse strands
 
 ---
 
 ## ⚙️ Configuration
 
-Edit `config.py` to customize:
+Create a `config.py` file in the repository root with these variables:
 
 ```python
-# PAM Site Definitions
-PAM_SITES = {
-    'NGG': 'SpCas9 (Streptococcus pyogenes)',
-    'NAG': 'Off-target NGG',
-    'NGA': 'Alternative PAM',
-    'NGC': 'Rare PAM'
-}
-
-# GC Content Range (%)
-GC_MIN = 30
-GC_MAX = 70
-
-# Mismatch Tolerance
-MAX_MISMATCHES = 4  # 0 = on-target, 3+ = ignore
-
-# MySQL Settings
-DB_HOST = "localhost"
-DB_PORT = 3306
-DB_USER = "root"
+MYSQL_HOST = "localhost"
+MYSQL_USER = "your_username"
+MYSQL_PASSWORD = "your_password"
+MYSQL_DATABASE = "crispr_vault"
 ```
+
+The Streamlit interface provides inputs for:
+- Gene name(s)
+- PAM sequence selection (NGG, NAG, NGA, NGC)
+- 20-base gRNA sequence
+- GC content filter (slider: 0–100%)
 
 ---
 
 ## 📊 Database Schema
 
-The MySQL `crispr_vault` automatically stores:
-- Simulation metadata (timestamp, user, parameters)
-- Complete results table (PAM sites, mismatches, predictions)
-- Visualization snapshots
-- Run history for comparison
+The `crispr_vault` table automatically stores:
 
-Query your runs:
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | INT (AUTO_INCREMENT PRIMARY KEY) | Unique run identifier |
+| `gene_name` | VARCHAR(255) | Gene symbol |
+| `gene_id` | VARCHAR(255) | NCBI gene ID |
+| `sequence_length` | INT | Length of fetched sequence (bp) |
+| `total_pams` | INT | Total PAM sites found on both strands |
+| `total_cuts` | INT | On-target cuts found |
+| `efficiency` | FLOAT | Efficiency percentage (cuts / PAMs) |
+
+**Query your runs:**
 ```sql
-SELECT * FROM crispr_vault WHERE gene = 'HBB' ORDER BY created_at DESC;
+SELECT * FROM crispr_vault WHERE gene_name = 'HBB' ORDER BY id DESC;
 ```
 
 ---
 
 ## ⚠️ Known Issues
 
-**Windows Smart App Control:** Some Windows 11 users may experience an `ImportError` for `_codonaligner` due to Smart App Control blocking Biopython's compiled files. 
+**Windows Smart App Control:** Some Windows 11 users may experience an `ImportError` for `_codonaligner` due to Smart App Control blocking Biopython's compiled files.
 
 **Solution:** Temporarily disable Smart App Control in Windows settings.
 
 ---
 
-## 🤝 Contributing
+## 🗺️ Roadmap
 
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m "Add your feature"`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
+- **V1 (Shipped):** NCBI fetch, dual-strand PAM scan, Hamming distance mismatch calculation, Cas9 cut simulation, NHEJ/HDR repair assignment, MySQL logging, 4 visualizations
+- **V2 (October):** Indel simulation for NHEJ with premature stop codon detection, HDR donor template input for precise gene correction
+- **V3 (2027):** Genome-wide off-target risk assessment
+
+---
+
+## 👨‍💻 Author
+
+**Sourabh Singh** — Self-taught bioinformatics developer
+
+- **GitHub:** https://github.com/CodeXSourabhsingh
+- **LinkedIn:** https://www.linkedin.com/in/sourabh-singh-7b124934/
 
 ---
 
