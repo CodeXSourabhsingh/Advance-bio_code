@@ -2,6 +2,7 @@ import pandas as pd
 from Bio import Entrez, SeqIO
 import matplotlib.pyplot as plt
 import streamlit as st
+from config import ENTREZ_EMAIL
 import time, random
 import mysql.connector
 try:
@@ -15,7 +16,7 @@ except Exception:
     from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
     MYSQL_PORT = 3306
 
-Entrez.email = "singhsourabh30542@gmail.com"
+Entrez.email = "ENTREZ_EMAIL"
 
 def get_db_connection():
     return mysql.connector.connect(
