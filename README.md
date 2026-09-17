@@ -59,7 +59,11 @@ A cutting-edge bioinformatics tool that fetches real gene sequences from NCBI, s
 ---
 
 ## 🚀 Quick Start
+## 🚀 Live Demo
 
+**[Click here to run the CRISPR Simulator](https://advance-biocode-whdikzngbtm3ojrz4du4kgc.streamlit.app)**
+
+**Note on Database Logging:** The live cloud demo runs without MySQL logging due to cloud networking limitations. To test the full pipeline including MySQL logging, follow the local installation instructions below.
 ### Prerequisites
 - Python 3.13+
 - MySQL Server (for data logging)
