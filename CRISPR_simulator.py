@@ -2,7 +2,6 @@ import pandas as pd
 from Bio import Entrez, SeqIO
 import matplotlib.pyplot as plt
 import streamlit as st
-from config import ENTREZ_EMAIL
 import time, random
 import mysql.connector
 try:
@@ -14,7 +13,7 @@ try:
     ENTREZ_EMAIL = st.secrets["ENTREZ_EMAIL"]
 except Exception:
    
-    from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
+    from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE,ENTREZ_EMAIL
     MYSQL_PORT = 3306
 
 Entrez.email = ENTREZ_EMAIL
