@@ -11,6 +11,7 @@ try:
     MYSQL_USER = st.secrets["MYSQL_USER"]
     MYSQL_PASSWORD = st.secrets["MYSQL_PASSWORD"]
     MYSQL_DATABASE = st.secrets["MYSQL_DATABASE"]
+    ENTREZ_EMAIL = st.secrets["ENTREZ_EMAIL"]
 except Exception:
    
     from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
