@@ -16,7 +16,7 @@ except Exception:
     from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
     MYSQL_PORT = 3306
 
-Entrez.email = "ENTREZ_EMAIL"
+Entrez.email = ENTREZ_EMAIL
 
 def get_db_connection():
     return mysql.connector.connect(
