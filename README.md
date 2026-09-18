@@ -111,12 +111,6 @@ The four tools are designed as a connected bioinformatics pipeline:
 3. **PRISM** helps identify relevant clinical cohorts and potential trial-fit candidates.
 4. **COVID-19 Variant Mutation Tracker** extends mutation analysis to viral evolution and variant monitoring.
 
-## Roadmap
-
-- ✅ V1 shipped for all four tools
-- 🔄 V2: Full Pango lineage database integration for COVID-19 tracking
-- 🔄 V3: Conservation scoring for protein mutation analysis
-- 🔄 V4: Machine-learning-based binding-affinity prediction in the upcoming Drug-Target Explorer project
 
 ## Author
 
