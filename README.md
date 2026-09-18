@@ -119,7 +119,7 @@ The four tools are designed as a connected bioinformatics pipeline:
 **Sourabh Singh**  
 
 - GitHub: [CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
-- LinkedIn: [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh)
+- LinkedIn:https://www.linkedin.com/in/sourabh-singh-7b124934/
 
 ## License
 
