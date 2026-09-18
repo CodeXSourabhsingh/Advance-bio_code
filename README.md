@@ -2,13 +2,14 @@
 
 > A connected bioinformatics portfolio for sequence analysis, protein structure assessment, clinical cohort filtering, and viral variant tracking.
 
-[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-CRISPR%20Gene%20Editing%20Simulator-2ea44f?style=for-the-badge)](https://share.streamlit.io/?utm_source=streamlit&utm_medium=referral&utm_campaign=main&utm_content=-ss-streamlit-io-topright)
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-CRISPR%20Gene%20Editing%20Simulator-2ea44f?style=for-the-badge)](https://share.streamlit.io/CodeXSourabhsingh/Advance-bio_code/main/CRISPR_simulator.py)
+[![PRISM Demo](https://img.shields.io/badge/📊%20PRISM%20Demo-Advanced%20Clinical%20Pipeline-2ea44f?style=for-the-badge)](https://share.streamlit.io/CodeXSourabhsingh/Advance-bio_code/main/PRISM%20.py)
 
-**Live demo:** [CRISPR and PRISM](https://share.streamlit.io/?utm_source=streamlit&utm_medium=referral&utm_campaign=main&utm_content=-ss-streamlit-io-topright)
+**Live demo:** [CRISPR Gene Editing Simulator](https://share.streamlit.io/CodeXSourabhsingh/Advance-bio_code/main/CRISPR_simulator.py) and [PRISM — Advanced Clinical Pipeline](https://share.streamlit.io/CodeXSourabhsingh/Advance-bio_code/main/PRISM%20.py)
 
 ## Overview
 
-Advance-bio_code brings together four interactive tools that connect genomic, structural, clinical, and viral mutation analysis into one bioinformatics ecosystem. The applications use publicly available data sources and computational methods to support interactive exploration.
+Advance-bio_code brings together four interactive tools that connect genomic, structural, clinical, and viral mutation analysis into one bioinformatics ecosystem. The applications use publicly available biological datasets and interactive interfaces to analyze genes, proteins, patient cohorts, and viral variants.
 
 > **Note:** Results are intended for research and educational exploration. They should not be used as a substitute for clinical diagnosis or medical advice.
 
@@ -43,11 +44,12 @@ Advance-bio_code brings together four interactive tools that connect genomic, st
 
 ## Live Demo
 
-Try the deployed application here:
+Try the deployed applications here:
 
-**[Open the CRISPR Gene Editing Simulator](https://share.streamlit.io/?utm_source=streamlit&utm_medium=referral&utm_campaign=main&utm_content=-ss-streamlit-io-topright)**
+- **[Open the CRISPR Gene Editing Simulator](https://share.streamlit.io/CodeXSourabhsingh/Advance-bio_code/main/CRISPR_simulator.py)**
+- **[Open PRISM — Advanced Clinical Pipeline](https://share.streamlit.io/CodeXSourabhsingh/Advance-bio_code/main/PRISM%20.py)**
 
-The cloud demo runs without MySQL logging because of cloud networking limitations. To test the complete pipeline, including MySQL logging, clone the repository and run it locally with your own MySQL installation.
+The cloud demo runs without MySQL logging because of cloud networking limitations. To test the complete pipeline, including MySQL logging, clone the repository and run it locally with your own MySQL instance.
 
 ## Tech Stack
 
