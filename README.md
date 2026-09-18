@@ -114,7 +114,7 @@ The four tools are designed as a connected bioinformatics pipeline:
 
 ## Author
 
-**Sourabh Singh** is a self-taught bioinformatics developer building applied tools at the intersection of genomics, clinical data, and computational biology.
+**Sourabh Singh** is a self-taught 
 
 - GitHub: [CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
 - LinkedIn: [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh)
