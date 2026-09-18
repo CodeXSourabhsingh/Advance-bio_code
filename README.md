@@ -7,7 +7,7 @@
 
 **Live demo:** [CRISPR Gene Editing Simulator](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/) and [PRISM — Advanced Clinical Pipeline](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/)
 
-"Cloud demo is capped at 5,000 patients due to Streamlit Cloud free-tier resource limits. Local installation supports up to 500,000 patients.and might suppor 800,000-900,000 also but phyton loop is bottleneck "
+"Cloud demo is capped at 5,000 patients due to Streamlit Cloud free-tier resource limits. Local installation supports up to 500,000 patients.
 ## Overview
 
 Advance-bio_code brings together four interactive tools that connect genomic, structural, clinical, and viral mutation analysis into one bioinformatics ecosystem. The applications use publicly available data sources and computational methods to support research and educational exploration.
