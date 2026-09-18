@@ -115,7 +115,7 @@ The four tools are designed as a connected bioinformatics pipeline:
 
 ## Author
 
-**Sourabh Singh** is a self-taught 
+**Sourabh Singh**  
 
 - GitHub: [CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
 - LinkedIn: [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh)
