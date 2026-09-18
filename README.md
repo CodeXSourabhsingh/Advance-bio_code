@@ -1,19 +1,53 @@
 # 🧬 Advance-bio_code
 
-Advance-bio_code is a connected bioinformatics portfolio that brings together CRISPR editing analysis, structural mutation assessment, clinical cohort filtering, and viral variant tracking in a single research workflow. The four Python applications use public data sources and sequence inputs to connect molecular observations with patient impact, making the repository a compact bioinformatics toolkit for studying how variants emerge, damage proteins, and influence disease outcomes.
+> A connected bioinformatics portfolio for sequence analysis, protein structure assessment, clinical cohort filtering, and viral variant tracking.
+
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-CRISPR%20Gene%20Editing%20Simulator-2ea44f?style=for-the-badge)](https://codexsourabhsingh-advance-bio-code.streamlit.app)
+
+**Live demo:** [CRISPR Gene Editing Simulator](https://codexsourabhsingh-advance-bio-code.streamlit.app)
+
+## Overview
+
+Advance-bio_code brings together four interactive tools that connect genomic, structural, clinical, and viral mutation analysis into one bioinformatics ecosystem. The applications use publicly available biological and clinical data to support exploratory analysis and visualization.
+
+> **Note:** Results are intended for research and educational exploration. They should not be used as a substitute for clinical diagnosis or medical advice.
 
 ## Tools
 
-- CRISPR Gene Editing Simulator — Fetches real gene sequences from NCBI, scans both DNA strands for PAM sites, calculates mismatch patterns, simulates Cas9 cleavage, and classifies likely repair outcomes.
-- PRISM - Advanced Clinical Pipeline — Fetches real clinical trial data, filters patient cohorts by disease, stage, age, and mutation, and identifies biomarker outliers and trial-fit candidates.
-- COVID-19 Variant Mutation Tracker — Fetches SARS-CoV-2 sequences, aligns the Spike region to the Wuhan-Hu-1 reference, detects substitutions and deletions, and scores immune escape and transmissibility.
-- Protein Structure Analyzer — Fetches PDB structures, locates mutation sites on protein chains, quantifies physicochemical changes, and classifies mutations based on structural impact.
+### 🧬 CRISPR Gene Editing Simulator
+
+- Fetches real gene sequences from NCBI.
+- Scans both DNA strands for PAM sites.
+- Calculates mismatch patterns and simulates Cas9 cleavage.
+- Classifies likely DNA repair outcomes.
+
+### 🧪 PRISM — Advanced Clinical Pipeline
+
+- Fetches real clinical trial data.
+- Filters patient cohorts by disease, stage, age, and mutation.
+- Identifies biomarker outliers and potential trial-fit candidates.
+
+### 🦠 COVID-19 Variant Mutation Tracker
+
+- Fetches SARS-CoV-2 sequences.
+- Aligns the Spike region against the Wuhan-Hu-1 reference.
+- Detects substitutions and deletions.
+- Scores potential immune escape and transmission-related effects.
+
+### 🧫 Protein Structure Analyzer
+
+- Fetches protein structures from the Protein Data Bank.
+- Locates mutation sites on protein chains.
+- Quantifies physicochemical changes.
+- Classifies mutations according to their predicted structural impact.
 
 ## Live Demo
 
-CRISPR Gene Editing Simulator: https://codexsourabhsingh-advance-bio-code.streamlit.app
+Try the deployed application here:
 
-The live cloud demo runs without MySQL logging due to cloud networking limitations. To test the full pipeline including MySQL logging, clone the repository and run locally with your own MySQL instance.
+**[Open the CRISPR Gene Editing Simulator](https://codexsourabhsingh-advance-bio-code.streamlit.app)**
+
+The cloud demo runs without MySQL logging because of cloud networking limitations. To test the complete pipeline, including MySQL logging, clone the repository and run it locally with your own MySQL instance.
 
 ## Tech Stack
 
@@ -27,16 +61,26 @@ The live cloud demo runs without MySQL logging due to cloud networking limitatio
 | MySQL | Persistent logging of pipeline outputs |
 | Biopython | Sequence analysis, alignment, and structure parsing |
 | Requests | API access to public data sources |
-| Py3Dmol | 3D protein structure viewing |
+| Py3Dmol | 3D protein structure visualization |
 
 ## Quick Start
 
-1. git clone the repo
-2. pip install biopython pandas numpy matplotlib streamlit mysql-connector-python requests py3dmol
-3. create config.py with MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, ENTREZ_EMAIL
-4. run each app with streamlit run
+### 1. Clone the repository
 
-Example configuration:
+```bash
+git clone https://github.com/CodeXSourabhsingh/Advance-bio_code.git
+cd Advance-bio_code
+```
+
+### 2. Install dependencies
+
+```bash
+pip install biopython pandas numpy matplotlib streamlit mysql-connector-python requests py3dmol
+```
+
+### 3. Configure the application
+
+Create a `config.py` file in the project root with your MySQL and NCBI Entrez settings:
 
 ```python
 MYSQL_HOST = "localhost"
@@ -46,25 +90,41 @@ MYSQL_DATABASE = "your_database"
 ENTREZ_EMAIL = "your.email@example.com"
 ```
 
+Keep credentials private and do not commit `config.py` if it contains secrets.
+
+### 4. Run an application
+
+Run the relevant Streamlit app from the repository root:
+
+```bash
+streamlit run <app_file>.py
+```
+
+Replace `<app_file>.py` with the Streamlit entry point for the tool you want to use.
+
 ## The Ecosystem
 
-The four tools work as a connected bioinformatics pipeline. CRISPR finds the mutation at the sequence level, Protein Analyzer predicts whether that mutation is structurally damaging, PRISM identifies the patient populations most likely affected by the mutation, and COVID tracker monitors how those mutations evolve over time in circulating viral sequences.
+The four tools are designed as a connected bioinformatics pipeline:
+
+1. **CRISPR Gene Editing Simulator** identifies mutations at the sequence level.
+2. **Protein Structure Analyzer** evaluates whether a mutation may affect protein structure or function.
+3. **PRISM** helps identify relevant clinical cohorts and potential trial-fit candidates.
+4. **COVID-19 Variant Mutation Tracker** extends mutation analysis to viral evolution and variant monitoring.
 
 ## Roadmap
 
-- V1 shipped for all four tools
-- V2 planned for full Pango lineage database in COVID
-- V3 planned for conservation scoring in Protein
-- V4 planned for ML-based binding affinity prediction in Drug-Target Explorer (next project)
+- ✅ V1 shipped for all four tools
+- 🔄 V2: Full Pango lineage database integration for COVID-19 tracking
+- 🔄 V3: Conservation scoring for protein mutation analysis
+- 🔄 V4: Machine-learning-based binding-affinity prediction in the upcoming Drug-Target Explorer project
 
 ## Author
 
-Sourabh Singh is a self-taught bioinformatics developer building applied tools at the intersection of genomics, clinical data, and computational biology.
+**Sourabh Singh** is a self-taught bioinformatics developer building applied tools at the intersection of genomics, clinical data, and computational biology.
 
-- GitHub: https://github.com/CodeXSourabhsingh
-- LinkedIn: https://www.linkedin.com/in/sourabh-singh
+- GitHub: [CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
+- LinkedIn: [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh)
 
 ## License
 
-MIT
-
+This project is licensed under the MIT License.
