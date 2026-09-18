@@ -19,11 +19,12 @@ except Exception:
 def get_db_connection():
     return mysql.connector.connect(
         host=MYSQL_HOST,
+        port=MYSQL_PORT,
         user=MYSQL_USER,
         password=MYSQL_PASSWORD,
-        database=MYSQL_DATABASE
+        database=MYSQL_DATABASE,
+        connection_timeout=3
     )
-
 class Patient:
     def __init__(self, id, age, sex, disease_state, cancer_stage, crispr_mutation, biomarker_value, is_outliers=False):
         self.id = id
