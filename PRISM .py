@@ -5,7 +5,15 @@ import requests
 import random
 import numpy as np
 import mysql.connector
-from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
+try:
+    MYSQL_HOST = st.secrets["MYSQL_HOST"]
+    MYSQL_PORT = st.secrets["MYSQL_PORT"]
+    MYSQL_USER = st.secrets["MYSQL_USER"]
+    MYSQL_PASSWORD = st.secrets["MYSQL_PASSWORD"]
+    MYSQL_DATABASE = st.secrets["MYSQL_DATABASE"]
+except Exception:
+    from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
+    MYSQL_PORT = 3306
 
 @st.cache_resource
 def get_db_connection():
