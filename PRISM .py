@@ -159,7 +159,7 @@ selected_diseases = st.multiselect("Select Disease", ['NSCLC', 'Breast Cancer', 
 
 selected_stages = st.multiselect("Select Stage", ['1', '2', '3', '4'], default=['1', '2'])
 min_age, max_age = st.slider("Age Range", 18, 90, (40, 70))
-num_patients = st.number_input("Number of Patients to Simulate", min_value=100, max_value=100000, value=2000, step=100)
+num_patients = st.number_input("Number of Patients to Simulate", min_value=100, max_value=5000, value=2000, step=100)
 
 st.subheader("CRISPR Integration (Optional)")
 use_crispr = st.checkbox("Filter by CRISPR Mutation")
