@@ -10,6 +10,34 @@
 
 "Cloud demo is capped at 5,000 patients due to Streamlit Cloud free-tier limits. To process up to 10,000,000 patients locally, change max_value=5000 to max_value=10000000 in PRISM.py and run locally."
 
+---
+
+Local Benchmark Environment
+
+The 10,000,000-patient benchmark was tested on:
+
+· Device: HP Laptop 15-fr0xxx
+· Processor: 13th Gen Intel Core i5-13420H (2.10 GHz, 8 cores, 12 threads)
+· RAM: 16 GB
+· Storage: 477 GB SSD
+· GPU: Intel UHD Graphics (integrated, not used for computation)
+· OS: Windows 11, 64-bit
+
+No dedicated GPU required. No cloud compute. No distributed infrastructure. This ran on a mid-range consumer laptop using pure Python, Pandas, and NumPy.
+
+Performance:
+
+· 500,000 patients → 7-8 seconds
+· 1,000,000 patients → 10-15 seconds
+· 2,000,000 patients → 20 seconds
+· 5,000,000 patients → 50 seconds
+· 10,000,000 patients → under 2 minutes
+
+Peak memory: 1.9 GB at 10 million patients.
+
+This means the pipeline is efficient enough to run on standard hardware. The bottleneck is the Python object generation loop, not the hardware itself.
+
+---
 
 ## Overview
 
