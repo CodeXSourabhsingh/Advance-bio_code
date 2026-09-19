@@ -7,7 +7,9 @@
 
 **Live demo:** [CRISPR Gene Editing Simulator](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/) and [PRISM — Advanced Clinical Pipeline](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/)
 
-"Cloud demo is capped at 5,000 patients due to Streamlit Cloud free-tier resource limits. Local installation verified up to 10,000,000 patients in under 2 minutes on an i5-13420H + 16 GB RAM setup."
+
+"Cloud demo is capped at 5,000 patients due to Streamlit Cloud free-tier limits. To process up to 10,000,000 patients locally, change max_value=5000 to max_value=10000000 in PRISM.py and run locally."
+
 
 ## Overview
 
