@@ -78,7 +78,7 @@ def fetch_clinical_trials(condition, page_size=10):
         "fields": "NCTId,BriefTitle,Phase,OverallStatus,EligibilityCriteria"
     }
     try:
-        response = requests.get(url, params=params, timeout=10)
+        response = requests.get(url, params=params, timeout= 20)
         if response.status_code != 200:
             raise Exception(f"API returned status {response.status_code}")
         data = response.json()
