@@ -211,7 +211,7 @@ def get_db_connection():
         user=MYSQL_USER,
         password=MYSQL_PASSWORD,
         database=MYSQL_DATABASE,
-        connection_timeout = 3
+        connection_timeou=3
     )
 
 def log_to_mysql(data):
