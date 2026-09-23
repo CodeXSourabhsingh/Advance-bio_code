@@ -17,9 +17,8 @@ try:
     MYSQL_USER = st.secrets["MYSQL_USER"]
     MYSQL_PASSWORD = st.secrets["MYSQL_PASSWORD"]
     MYSQL_DATABASE = st.secrets["MYSQL_DATABASE"]
-    ENTREZ_EMAIL = st.secrets["ENTREZ_EMAIL"]
 except Exception:
-    from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, ENTREZ_EMAIL
+    from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE,
     MYSQL_PORT = 3306
 
 
@@ -212,6 +211,7 @@ def get_db_connection():
         user=MYSQL_USER,
         password=MYSQL_PASSWORD,
         database=MYSQL_DATABASE
+        connection_timeout = 3
     )
 
 def log_to_mysql(data):
