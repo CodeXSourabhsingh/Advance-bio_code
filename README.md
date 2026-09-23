@@ -4,9 +4,10 @@
 
 [![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-CRISPR%20Gene%20Editing%20Simulator-2ea44f?style=for-the-badge)](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/)
 [![PRISM Demo](https://img.shields.io/badge/📊%20PRISM%20Demo-Advanced%20Clinical%20Pipeline-2ea44f?style=for-the-badge)](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/)
+[![COVID-19 Demo](https://img.shields.io/badge/🦠%20COVID--19%20Demo-Variant%20Mutation%20Tracker-2ea44f?style=for-the-badge)](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together four interactive applications that connect genomic sequencing, structural biology, clinical cohort analysis, and viral mutation tracking into a single ecosystem.
+Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together four interactive applications for sequence analysis, protein structure assessment, clinical cohort filtering, and viral variant tracking.
 
 ## Project at a Glance
 
@@ -58,6 +59,7 @@ Try the deployed applications here:
 
 - [Open the CRISPR Gene Editing Simulator](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/)
 - [Open PRISM — Advanced Clinical Pipeline](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/)
+- [Open the COVID-19 Variant Mutation Tracker](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/)
 
 > Note: The cloud-hosted demo runs without MySQL logging because of Streamlit Cloud networking limitations. For the complete pipeline, including MySQL-powered logging, run the project locally with your own MySQL instance.
 
