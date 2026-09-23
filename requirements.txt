@@ -5,3 +5,6 @@ matplotlib
 requests
 mysql-connector-python
 biopython
+py3dmol
+requests
+scikit-learn
