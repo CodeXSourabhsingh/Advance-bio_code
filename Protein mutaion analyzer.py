@@ -9,7 +9,19 @@ import streamlit.components.v1 as components
 from builtins import ValueError
 from io import StringIO
 from Bio.PDB import PDBParser
-from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
+
+
+try:
+    MYSQL_HOST = st.secrets["MYSQL_HOST"]
+    MYSQL_PORT = st.secrets["MYSQL_PORT"]
+    MYSQL_USER = st.secrets["MYSQL_USER"]
+    MYSQL_PASSWORD = st.secrets["MYSQL_PASSWORD"]
+    MYSQL_DATABASE = st.secrets["MYSQL_DATABASE"]
+    ENTREZ_EMAIL = st.secrets["ENTREZ_EMAIL"]
+except Exception:
+    from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, ENTREZ_EMAIL
+    MYSQL_PORT = 3306
+
 
 HYDROPHOBICITY = {
     "A": 1.8, "R": -4.5, "N": -3.5, "D": -3.5, "C": 2.5,
