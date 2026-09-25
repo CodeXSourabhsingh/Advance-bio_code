@@ -7,6 +7,12 @@
 [![COVID-19 Demo](https://img.shields.io/badge/🦠%20COVID--19%20Demo-Variant%20Mutation%20Tracker-2ea44f?style=for-the-badge)](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/)
 [![Protein Mutation Demo](https://img.shields.io/badge/🧫%20Protein%20Mutation%20Demo-Structure%20Analyzer-2ea44f?style=for-the-badge)](https://advance-biocode-dmogu9dlhr6l5kjm8peqfz.streamlit.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+💊 Drug-Target Interaction Explorer
+
+· Fetches real drug-target binding data from ChEMBL
+· Classifies every interaction by binding strength (IC50/Ki/Kd)
+· Renders the primary protein target in 3D via PDB structures
+· Logs every run to MySQL for full audit trail
 
 Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together four interactive applications for sequence analysis, protein structure assessment, clinical cohort filtering, and viral variant tracking.
 
