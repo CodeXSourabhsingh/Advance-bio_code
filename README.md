@@ -561,7 +561,7 @@ Always validate computational predictions with experimental data and consult app
 
 - **GitHub:** [@CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
 - **LinkedIn:** [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh-7b1249434/)
-- **Email:** sourabh@example.com (update as needed)
+
 
 ---
 
@@ -590,7 +590,3 @@ You must:
 - Biopython community
 
 ---
-
-**Last Updated:** September 2024  
-**Status:** Active Development  
-**Version:** 1.0.0
