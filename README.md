@@ -7,10 +7,11 @@
 [![COVID-19 Demo](https://img.shields.io/badge/🦠%20COVID--19%20Demo-Variant%20Mutation%20Tracker-2ea44f?style=for-the-badge)](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/)
 [![Protein Mutation Demo](https://img.shields.io/badge/🧫%20Protein%20Mutation%20Demo-Structure%20Analyzer-2ea44f?style=for-the-badge)](https://advance-biocode-dmogu9dlhr6l5kjm8peqfz.streamlit.app/)
 [![Drug-Target Demo](https://img.shields.io/badge/💊%20Drug--Target%20Demo-Interaction%20Explorer-2ea44f?style=for-the-badge)](https://advance-biocode-ewjbtfap7ensteshckapp8.streamlit.app/)
+[![Microbiome Demo](https://img.shields.io/badge/🌍%20Microbiome%20Demo-Diversity%20Dashboard-2ea44f?style=for-the-badge)](https://advance-biocode-glrckmx5empu7jygarh75j.streamlit.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 
-Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together five integrated bioinformatics workflows spanning genomic editing, clinical cohort analysis, viral surveillance, structural mutation interpretation, and drug-target prediction.
+Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together six integrated bioinformatics workflows spanning genomic editing, clinical cohort analysis, viral surveillance, structural mutation interpretation, drug-target prediction, and microbiome ecological profiling.
 
 ---
 
@@ -106,7 +107,7 @@ Advance-bio_code is a Python-based bioinformatics toolkit designed for research,
 
 ### **Workflow Integration**
 
-The five tools are designed as a connected research pipeline:
+The six tools are designed as a connected research pipeline:
 
 ```text
 1. CRISPR Simulator
@@ -220,7 +221,7 @@ This creates a comprehensive research workflow spanning:
 
 ---
 
-### 🧫 Microbiome Diversity Dashboard
+### 🌍 Microbiome Diversity Dashboard
 
 **Purpose:** Quantify and compare microbial community structure across environmental or clinical samples
 
@@ -246,6 +247,7 @@ Try the deployed applications here:
 | 🦠 COVID-19 Variant Tracker | [Launch Demo](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/) |
 | 🧫 Protein Mutation Analyzer | [Launch Demo](https://advance-biocode-dmogu9dlhr6l5kjm8peqfz.streamlit.app/) |
 | 💊 Drug-Target Interaction Explorer | [Launch Demo](https://advance-biocode-ewjbtfap7ensteshckapp8.streamlit.app/) |
+| 🌍 Microbiome Diversity Dashboard | [Launch Demo](https://advance-biocode-glrckmx5empu7jygarh75j.streamlit.app/) |
 
 > **⚠️ Cloud Deployment Note:** The Streamlit Cloud deployment runs without MySQL logging due to networking limitations. For the complete pipeline with persistent logging, run locally (see [Quick Start](#quick-start)).
 
