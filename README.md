@@ -1,372 +1,592 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import mysql.connector
-from sklearn.decomposition import PCA
+# 🧬 Advance-bio_code
 
-try:
-    MYSQL_HOST = st.secrets["MYSQL_HOST"]
-    MYSQL_PORT = st.secrets["MYSQL_PORT"]
-    MYSQL_USER = st.secrets["MYSQL_USER"]
-    MYSQL_PASSWORD = st.secrets["MYSQL_PASSWORD"]
-    MYSQL_DATABASE = st.secrets["MYSQL_DATABASE"]
-except Exception:
-    from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
-    MYSQL_PORT = 3306
+> A connected bioinformatics portfolio for sequence analysis, protein structure assessment, clinical cohort filtering, and viral variant tracking.
 
-TAXONOMY_MAP = {
-    "OTU_1": "Bacteroides",
-    "OTU_2": "Firmicutes",
-    "OTU_3": "Proteobacteria",
-    "OTU_4": "Actinobacteria",
-    "OTU_5": "Fusobacteria",
-    "OTU_6": "Verrucomicrobia",
-    "OTU_7": "Euryarchaeota",
-    "OTU_8": "Cyanobacteria",
-    "OTU_9": "Spirochaetes",
-    "OTU_10": "Chloroflexi",
-    "OTU_11": "Acidobacteria",
-    "OTU_12": "Planctomycetes"
-}
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-CRISPR%20Gene%20Editing%20Simulator-2ea44f?style=for-the-badge)](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/)
+[![PRISM Demo](https://img.shields.io/badge/📊%20PRISM%20Demo-Advanced%20Clinical%20Pipeline-2ea44f?style=for-the-badge)](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/)
+[![COVID-19 Demo](https://img.shields.io/badge/🦠%20COVID--19%20Demo-Variant%20Mutation%20Tracker-2ea44f?style=for-the-badge)](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/)
+[![Protein Mutation Demo](https://img.shields.io/badge/🧫%20Protein%20Mutation%20Demo-Structure%20Analyzer-2ea44f?style=for-the-badge)](https://advance-biocode-dmogu9dlhr6l5kjm8peqfz.streamlit.app/)
+[![Drug-Target Demo](https://img.shields.io/badge/💊%20Drug--Target%20Demo-Interaction%20Explorer-2ea44f?style=for-the-badge)](https://advance-biocode-ewjbtfap7ensteshckapp8.streamlit.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 
-FUNCTION_MAP = {
-    "Bacteroides": "Polysaccharide Degradation",
-    "Firmicutes": "Butyrate Production",
-    "Proteobacteria": "Nitrogen Fixation",
-    "Actinobacteria": "Antibiotic Production",
-    "Fusobacteria": "Inflammatory Signaling",
-    "Verrucomicrobia": "Mucin Degradation",
-    "Euryarchaeota": "Methanogenesis",
-    "Cyanobacteria": "Photosynthesis",
-    "Spirochaetes": "Motility",
-    "Chloroflexi": "Carbon Fixation",
-    "Acidobacteria": "Organic Acid Metabolism",
-    "Planctomycetes": "Ammonia Oxidation"
-}
+Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together five integrated Python applications covering CRISPR editing workflows, clinical cohort analysis, viral variant surveillance, protein structure interpretation, and drug-target interaction screening.
 
-@st.cache_data
-def generate_otu_table(num_samples, num_taxa):
-    np.random.seed(42)
-    num_taxa = min(num_taxa, 12)
-    data = np.random.gamma(shape=2, scale=100, size=(num_samples, num_taxa)).astype(int)
-    data[np.random.rand(num_samples, num_taxa) < 0.4] = 0
-    for i in range(num_samples):
-        if data[i].sum() == 0:
-            data[i, np.random.randint(0, num_taxa)] = np.random.randint(50, 200)
-    taxa_names = [f"OTU_{i+1}" for i in range(num_taxa)]
-    sample_names = [f"Sample_{i+1}" for i in range(num_samples)]
-    return pd.DataFrame(data, index=sample_names, columns=taxa_names)
+---
 
-def clean_otu_table(df):
-    df = df.loc[:, (df != 0).any(axis=0)]
-    totals = df.sum(axis=1)
-    df = df[totals > 0]
-    return df
+## 📋 Table of Contents
 
-def to_relative_abundance(df):
-    totals = df.sum(axis=1)
-    rel = df.div(totals, axis=0)
-    rel = rel.div(rel.sum(axis=1), axis=0)
-    return rel.fillna(0)
+- [Project at a Glance](#project-at-a-glance)
+- [The Ecosystem](#-the-ecosystem)
+- [Tools & Features](#tools--features)
+- [Live Demo](#live-demo)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Performance Benchmarks](#performance-benchmarks)
+- [Scaling & Deployment](#scaling--deployment)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [Notes & Disclaimer](#notes--disclaimer)
+- [Author](#author)
+- [License](#license)
 
-def alpha_diversity(raw_df, rel_df):
-    results = []
-    for sample in rel_df.index:
-        row = rel_df.loc[sample]
-        row_nonzero = row[row > 0]
-        observed = len(row_nonzero)
-        if observed == 0:
-            continue
-        shannon = -np.sum(row_nonzero * np.log(row_nonzero))
-        simpson = 1 - np.sum(row_nonzero ** 2)
-        counts = raw_df.loc[sample]
-        f1 = int(np.sum(counts == 1))
-        f2 = int(np.sum(counts == 2))
-        if f2 > 0:
-            chao1 = observed + (f1 ** 2) / (2 * f2)
-        else:
-            chao1 = observed + (f1 * (f1 - 1)) / 2
-        evenness = shannon / np.log(observed) if observed > 1 else 0
-        results.append({
-            "sample_id": sample,
-            "observed_otus": observed,
-            "shannon": round(shannon, 4),
-            "simpson": round(simpson, 4),
-            "chao1": round(chao1, 2),
-            "evenness": round(evenness, 4)
-        })
-    return pd.DataFrame(results)
+---
 
-def bray_curtis_matrix(rel_df):
-    samples = rel_df.index.tolist()
-    matrix = pd.DataFrame(0.0, index=samples, columns=samples)
-    for i, a in enumerate(samples):
-        for j, b in enumerate(samples):
-            if i == j:
-                continue
-            row_a = rel_df.loc[a].values
-            row_b = rel_df.loc[b].values
-            numerator = np.sum(np.abs(row_a - row_b))
-            denominator = np.sum(row_a + row_b)
-            if denominator > 0:
-                value = numerator / denominator
-                matrix.loc[a, b] = min(max(value, 0.0), 1.0)
-    return matrix
+## Project at a Glance
 
-def jaccard_matrix(df):
-    presence = (df > 0).astype(int)
-    samples = presence.index.tolist()
-    matrix = pd.DataFrame(0.0, index=samples, columns=samples)
-    for i, a in enumerate(samples):
-        for j, b in enumerate(samples):
-            if i == j:
-                continue
-            a_set = set(presence.loc[a][presence.loc[a] == 1].index)
-            b_set = set(presence.loc[b][presence.loc[b] == 1].index)
-            intersection = len(a_set & b_set)
-            union = len(a_set | b_set)
-            if union > 0:
-                value = 1 - (intersection / union)
-                matrix.loc[a, b] = min(max(value, 0.0), 1.0)
-    return matrix
+- **5 integrated interactive applications**
+- Sequence analysis using public genomic data
+- Mutation and cleavage simulation for CRISPR workflows
+- Clinical cohort filtering and trial-fit evaluation
+- Viral variant tracking for SARS-CoV-2
+- Protein structure impact assessment
+- Drug-target binding prediction and scoring
+- MySQL-powered audit logging and data persistence
+- Built with Python, Streamlit, Pandas, NumPy, and Biopython
+- Optimized for standard consumer hardware (tested on mid-range laptop)
+- Benchmark: Process 10 million patient records in under 2 minutes
 
-def pcoa_projection(bray_matrix):
-    pca = PCA(n_components=2)
-    coords = pca.fit_transform(bray_matrix.values)
-    return pd.DataFrame(coords, columns=["PC1", "PC2"], index=bray_matrix.index)
+---
 
-def map_taxonomy(otu_names):
-    return [TAXONOMY_MAP.get(name, "Unknown") for name in otu_names]
+## 🌍 The Ecosystem
 
-def taxonomy_abundance(rel_df, taxonomy_list, otu_names):
-    tax_abundance = {}
-    for otu_name, tax_name in zip(otu_names, taxonomy_list):
-        mean_abundance = rel_df[otu_name].mean()
-        tax_abundance[tax_name] = tax_abundance.get(tax_name, 0) + mean_abundance
-    return pd.Series(tax_abundance).sort_values(ascending=False)
+```text
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    ADVANCE-BIO_CODE BIOINFORMATICS ECOSYSTEM             │
+└──────────────────────────────────────────────────────────────────────────┘
 
-def predict_function(taxonomy_names):
-    unique_tax = set(taxonomy_names)
-    functions = []
-    for name in unique_tax:
-        fn = FUNCTION_MAP.get(name, "Unknown Function")
-        if fn not in functions:
-            functions.append(fn)
-    return functions
+                           ┌─────────────────────┐
+                           │   Data Collection   │
+                           │     & Analysis      │
+                           └──────────┬──────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+            ┌──────────────┐   ┌──────────────┐  ┌──────────────┐
+            │    NCBI      │   │  PubChem/    │  │     PDB      │
+            │  GenBank     │   │  ChEMBL      │  │  Database    │
+            └──────┬───────┘   └──────┬───────┘  └──────┬───────┘
+                   │                  │                 │
+        ┌──────────┴──────────┬───────┴────────┬────────┴─────────┐
+        │                     │                │                  │
+        ▼                     ▼                ▼                  ▼
+   ┌─────────────┐   ┌──────────────┐  ┌─────────────┐  ┌──────────────┐
+   │   CRISPR    │   │    PRISM     │  │  COVID-19   │  │   Protein    │
+   │ Gene Editor │   │  Clinical    │  │   Variant   │  │  Structure   │
+   │ Simulator   │   │  Pipeline    │  │  Tracker    │  │  Analyzer    │
+   └──────┬──────┘   └──────┬───────┘  └──────┬──────┘  └──────┬───────┘
+          │                 │                  │               │
+          └─────────────────┼──────────────────┼───────────────┘
+                            │
+                   ┌────────┴────────┐
+                   │                 │
+                   ▼                 ▼
+            ┌────────────────┐  ┌──────────────┐
+            │   Drug-Target  │  │    MySQL     │
+            │  Interaction   │  │    Logging   │
+            │   Explorer     │  │  & Audit     │
+            └────────────────┘  └──────────────┘
+                    │
+                    ▼
+        ┌──────────────────────────────┐
+        │  Research & Clinical Outputs │
+        │  - Mutation Classifications  │
+        │  - Trial Fit Predictions     │
+        │  - Variant Risk Scoring      │
+        │  - Structure Impact Analysis │
+        │  - Drug Binding Predictions  │
+        └──────────────────────────────┘
+```
 
-@st.cache_resource
-def get_db_connection():
-    return mysql.connector.connect(
-        host=MYSQL_HOST,
-        port=MYSQL_PORT,
-        user=MYSQL_USER,
-        password=MYSQL_PASSWORD,
-        database=MYSQL_DATABASE
-    )
+### **Workflow Integration**
 
-def log_to_mysql(alpha_df, beta_matrix):
-    try:
-        mydb = get_db_connection()
-        cursor = mydb.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS microbiome_samples (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                sample_id VARCHAR(100),
-                observed_otus INT,
-                shannon FLOAT,
-                simpson FLOAT,
-                chao1 FLOAT,
-                evenness FLOAT,
-                logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS beta_diversity (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                sample_a VARCHAR(100),
-                sample_b VARCHAR(100),
-                bray_curtis FLOAT,
-                logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        for _, row in alpha_df.iterrows():
-            cursor.execute("""
-                INSERT INTO microbiome_samples
-                (sample_id, observed_otus, shannon, simpson, chao1, evenness)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """, (
-                row["sample_id"], int(row["observed_otus"]),
-                float(row["shannon"]), float(row["simpson"]),
-                float(row["chao1"]), float(row["evenness"])
-            ))
-        samples = beta_matrix.index.tolist()
-        for i, a in enumerate(samples):
-            for j, b in enumerate(samples):
-                if i < j:
-                    cursor.execute("""
-                        INSERT INTO beta_diversity
-                        (sample_a, sample_b, bray_curtis)
-                        VALUES (%s, %s, %s)
-                    """, (a, b, float(beta_matrix.loc[a, b])))
-        mydb.commit()
-        cursor.close()
-    except Exception as e:
-        st.error(f"Database Error: {e}")
+The five tools are designed as a connected research pipeline:
 
-st.title("Microbiome Diversity Dashboard")
+```text
+1. CRISPR Simulator
+   ↓ (Identifies sequence mutations)
 
-if "results" not in st.session_state:
-    st.session_state.results = None
+2. Protein Structure Analyzer
+   ↓ (Evaluates structural impact)
 
-st.subheader("Input")
+3. PRISM Clinical Pipeline
+   ↓ (Finds relevant patient cohorts)
 
-input_mode = st.radio("Data source:", ["Use Synthetic Data", "Upload CSV"], horizontal=True)
+4. Drug-Target Explorer
+   ↓ (Predicts drug interactions)
 
-uploaded_file = None
-num_samples = 20
-num_taxa = 12
+5. COVID-19 Tracker
+   └─→ (Extends analysis to viral evolution)
 
-if input_mode == "Upload CSV":
-    uploaded_file = st.file_uploader("Upload OTU table (CSV)", type=["csv"])
-    st.caption("Format: rows = samples, columns = taxa, values = read counts.")
-else:
-    col1, col2 = st.columns(2)
-    with col1:
-        num_samples = st.number_input("Number of Samples:", min_value=5, max_value=100, value=20)
-    with col2:
-        num_taxa = st.number_input("Number of Taxa:", min_value=5, max_value=12, value=12)
+   ALL RESULTS → MySQL Logging & Audit Trail
+```
 
-run_button = st.button("Run Analysis")
+This creates a comprehensive research workflow spanning:
+- **Molecular Biology** — Sequence editing and analysis
+- **Structural Biology** — Protein impact assessment
+- **Clinical Relevance** — Patient cohort identification
+- **Pharmacology** — Drug-target interactions
+- **Viral Surveillance** — Variant monitoring and mutation scoring
 
-if run_button:
-    if input_mode == "Upload CSV":
-        if uploaded_file is None:
-            st.error("Please upload a CSV file.")
-            st.stop()
-        raw_df = pd.read_csv(uploaded_file, index_col=0)
-    else:
-        raw_df = generate_otu_table(num_samples, num_taxa)
+---
 
-    if raw_df.empty:
-        st.error("Empty OTU table.")
-        st.stop()
+## Tools & Features
 
-    cleaned = clean_otu_table(raw_df)
+### 🧬 CRISPR Gene Editing Simulator
 
-    if cleaned.empty:
-        st.error("No valid data after cleaning.")
-        st.stop()
+**Purpose:** Design and simulate CRISPR-Cas9 gene editing workflows
 
-    rel_df = to_relative_abundance(cleaned)
+- Fetches real gene sequences from NCBI GenBank
+- Scans both DNA strands for PAM motifs (NGG, NGG variants)
+- Calculates mismatch patterns and specificity scores
+- Simulates Cas9 cleavage and off-target potential
+- Classifies likely DNA repair outcomes (NHEJ, HDR)
+- Exports guide RNA designs and cleavage predictions
 
-    with st.spinner("Computing alpha diversity..."):
-        alpha_df = alpha_diversity(cleaned, rel_df)
+**Entry Point:** `CRISPR.py`
 
-    with st.spinner("Computing beta diversity..."):
-        bray = bray_curtis_matrix(rel_df)
-        jaccard = jaccard_matrix(cleaned)
+---
 
-    with st.spinner("Running PCoA..."):
-        pcoa_df = pcoa_projection(bray)
+### 🧪 PRISM — Advanced Clinical Pipeline
 
-    otu_names = cleaned.columns.tolist()
-    taxonomy_names = map_taxonomy(otu_names)
-    tax_series = taxonomy_abundance(rel_df, taxonomy_names, otu_names)
-    functions = predict_function(taxonomy_names)
+**Purpose:** Filter and analyze large patient cohorts for trial-fit and biomarker discovery
 
-    log_to_mysql(alpha_df, bray)
+- Fetches public clinical trial metadata and patient cohorts
+- Filters by disease, stage, age, genetic mutations, biomarkers
+- Identifies statistical outliers and potential trial-fit candidates
+- Supports analysis of 500K–10M patient records
+- Benchmarked for speed: 10M patients in <2 minutes
+- Generates cohort reports with demographic and genetic breakdowns
+- MySQL integration for full audit and result persistence
 
-    st.session_state.results = {
-        "raw_df": raw_df,
-        "cleaned": cleaned,
-        "rel_df": rel_df,
-        "alpha_df": alpha_df,
-        "bray": bray,
-        "jaccard": jaccard,
-        "pcoa_df": pcoa_df,
-        "taxonomy": taxonomy_names,
-        "tax_series": tax_series,
-        "functions": functions
-    }
+**Entry Point:** `PRISM.py`
 
-if st.session_state.results is not None:
-    res = st.session_state.results
+---
 
-    st.divider()
-    st.subheader("Analysis Results")
+### 🦠 COVID-19 Variant Mutation Tracker
 
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(
-        ["Alpha Diversity", "Beta Diversity", "PCoA", "Taxonomy", "Function"]
-    )
+**Purpose:** Monitor SARS-CoV-2 evolution and assess variant risk
 
-    with tab1:
-        st.dataframe(res["alpha_df"])
+- Fetches latest SARS-CoV-2 sequence data from GISAID/NCBI
+- Aligns Spike protein region against Wuhan-Hu-1 reference genome
+- Detects substitutions, insertions, and deletions
+- Scores mutations for immune escape potential (ACE2 binding, epitope impact)
+- Ranks transmission risk using phylogenetic distance and prevalence
+- Tracks emerging variants and mutation patterns over time
 
-        fig1, ax1 = plt.subplots(figsize=(10, 5))
-        ax1.bar(res["alpha_df"]["sample_id"], res["alpha_df"]["shannon"], color="steelblue")
-        ax1.set_title("Shannon Index per Sample")
-        ax1.set_xlabel("Sample")
-        ax1.set_ylabel("Shannon Index")
-        plt.xticks(rotation=45, ha="right")
-        st.pyplot(fig1)
-        plt.close(fig1)
+**Entry Point:** `COVID_19_Tracker.py`
 
-        fig2, ax2 = plt.subplots(figsize=(10, 5))
-        ax2.bar(res["alpha_df"]["sample_id"], res["alpha_df"]["observed_otus"], color="darkorange")
-        ax2.set_title("Observed OTUs per Sample")
-        ax2.set_xlabel("Sample")
-        ax2.set_ylabel("Richness")
-        plt.xticks(rotation=45, ha="right")
-        st.pyplot(fig2)
-        plt.close(fig2)
+---
 
-    with tab2:
-        st.write("Bray-Curtis Dissimilarity Matrix")
-        st.dataframe(res["bray"].round(3))
-        st.write("Jaccard Dissimilarity Matrix")
-        st.dataframe(res["jaccard"].round(3))
+### 🧫 Protein Structure Analyzer
 
-        fig3, ax3 = plt.subplots(figsize=(8, 6))
-        im = ax3.imshow(res["bray"].values, cmap="viridis", aspect="auto", vmin=0, vmax=1)
-        ax3.set_xticks(range(len(res["bray"].index)))
-        ax3.set_yticks(range(len(res["bray"].index)))
-        ax3.set_xticklabels(res["bray"].index, rotation=45, ha="right")
-        ax3.set_yticklabels(res["bray"].index)
-        ax3.set_title("Bray-Curtis Heatmap")
-        plt.colorbar(im, ax=ax3)
-        st.pyplot(fig3)
-        plt.close(fig3)
+**Purpose:** Predict how mutations affect protein structure and function
 
-    with tab3:
-        pcoa = res["pcoa_df"]
-        fig4, ax4 = plt.subplots(figsize=(8, 6))
-        ax4.scatter(pcoa["PC1"], pcoa["PC2"], s=80, c="teal", alpha=0.7)
-        for sample in pcoa.index:
-            ax4.annotate(sample, (pcoa.loc[sample, "PC1"], pcoa.loc[sample, "PC2"]),
-                         fontsize=8, alpha=0.7)
-        ax4.set_title("PCoA Projection (Bray-Curtis)")
-        ax4.set_xlabel("PC1")
-        ax4.set_ylabel("PC2")
-        ax4.grid(True, alpha=0.3)
-        st.pyplot(fig4)
-        plt.close(fig4)
+- Fetches protein structures from the Protein Data Bank (PDB)
+- Locates mutation sites on protein chains in 3D space
+- Calculates physicochemical property changes (charge, polarity, hydrophobicity)
+- Estimates structural destabilization risk (RSA, DSSP properties)
+- Classifies mutations: benign, disease-associated, or deleterious
+- Interactive 3D visualization of mutation sites
+- Comparison against known disease databases
 
-    with tab4:
-        tax_df = pd.DataFrame({
-            "OTU": res["cleaned"].columns.tolist(),
-            "Taxonomy": res["taxonomy"]
-        })
-        st.dataframe(tax_df)
+**Entry Point:** `Protein_mutation_analyzer.py`
 
-        fig5, ax5 = plt.subplots(figsize=(8, 6))
-        tax_series = res["tax_series"]
-        ax5.pie(tax_series.values, labels=tax_series.index, autopct='%1.1f%%')
-        ax5.set_title("Mean Relative Abundance by Taxon")
-        st.pyplot(fig5)
-        plt.close(fig5)
+---
 
-    with tab5:
-        st.write("Predicted Metabolic Functions")
-        for fn in res["functions"]:
-            st.write(f"• {fn}")
+### 💊 Drug-Target Interaction Explorer
+
+**Purpose:** Predict drug-target binding affinity and mechanism
+
+- Fetches drug-target binding data from ChEMBL database
+- Classifies interactions by binding strength (IC50, Ki, Kd values)
+- Visualizes primary protein targets in 3D using PDB structures
+- Supports target filtering by gene, protein family, or pathway
+- Scoring framework for therapeutic potential and off-target risk
+- Full audit trail logging to MySQL for regulatory compliance
+- Enables drug repurposing and polypharmacology discovery
+
+**Entry Point:** `Drug_Target_Explorer.py`
+
+---
+
+## Live Demo
+
+Try the deployed applications here:
+
+| Tool | Live Demo |
+|------|-----------|
+| 🧬 CRISPR Gene Editing Simulator | [Launch Demo](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/) |
+| 🧪 PRISM Clinical Pipeline | [Launch Demo](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/) |
+| 🦠 COVID-19 Variant Tracker | [Launch Demo](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/) |
+| 🧫 Protein Mutation Analyzer | [Launch Demo](https://advance-biocode-dmogu9dlhr6l5kjm8peqfz.streamlit.app/) |
+| 💊 Drug-Target Interaction Explorer | [Launch Demo](https://advance-biocode-ewjbtfap7ensteshckapp8.streamlit.app/) |
+
+> **⚠️ Cloud Deployment Note:** The Streamlit Cloud deployment runs without MySQL logging due to networking limitations. For the complete pipeline with persistent logging, run locally (see [Quick Start](#quick-start)).
+
+---
+
+## Tech Stack
+
+| Technology | Version | Role |
+|---|---|---|
+| **Python** | 3.13+ | Core runtime and computational engine |
+| **Streamlit** | Latest | Interactive web dashboards and UI |
+| **Pandas** | Latest | Tabular data handling and analysis |
+| **NumPy** | Latest | Numerical arrays and vectorized operations |
+| **Matplotlib** | Latest | Static plotting and data visualization |
+| **Biopython** | 1.80+ | Sequence analysis, alignment, structure parsing |
+| **Requests** | Latest | HTTP client for API access |
+| **MySQL Connector** | 8.0+ | Database connectivity and logging |
+| **Py3Dmol** | Latest | Interactive 3D protein structure rendering |
+
+**External APIs:**
+- NCBI Entrez (GenBank, GeneID, Protein)
+- PubChem/ChEMBL (Drug-target data)
+- Protein Data Bank (PDB structures)
+- GISAID/NCBI (SARS-CoV-2 sequences)
+
+---
+
+## Prerequisites
+
+### System Requirements
+
+- **Python:** 3.13 or higher
+- **OS:** Windows, macOS, or Linux
+- **RAM:** 4 GB minimum (16 GB recommended for PRISM scaling)
+- **Storage:** 500 MB for code and dependencies
+- **GPU:** Not required (CPU-based computation)
+
+### Software Dependencies
+
+- Git (for cloning the repository)
+- pip (Python package manager)
+- MySQL Server 8.0+ (optional, for logging)
+
+### API Requirements
+
+- **NCBI Entrez Email:** Free NCBI account (register at [NCBI](https://www.ncbi.nlm.nih.gov/))
+- **MySQL Credentials:** If using database logging locally
+
+---
+
+## Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/CodeXSourabhsingh/Advance-bio_code.git
+cd Advance-bio_code
+```
+
+### 2. Create Virtual Environment (Recommended)
+
+```bash
+# On Windows
+python -m venv venv
+venv\Scripts\activate
+
+# On macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Or install manually:
+
+```bash
+pip install biopython pandas numpy matplotlib streamlit mysql-connector-python requests py3dmol
+```
+
+### 4. Configure the Application
+
+Create a `config.py` file in the project root:
+
+```python
+# config.py
+MYSQL_HOST = "localhost"
+MYSQL_USER = "your_mysql_user"
+MYSQL_PASSWORD = "your_mysql_password"
+MYSQL_DATABASE = "bioinformatics_db"
+MYSQL_PORT = 3306
+
+ENTREZ_EMAIL = "your.email@example.com"
+ENTREZ_API_KEY = "optional_ncbi_api_key"
+
+# Streamlit Cloud deployment (set to False locally)
+USE_CLOUD_DEPLOYMENT = False
+```
+
+**⚠️ Security:** Never commit `config.py` with real credentials. Add it to `.gitignore`:
+
+```bash
+echo "config.py" >> .gitignore
+```
+
+### 5. Verify Installation
+
+Test that all dependencies are installed:
+
+```bash
+python -c "import streamlit, biopython, pandas, numpy; print('✓ All dependencies loaded')"
+```
+
+### 6. Run an Application
+
+From the project root:
+
+```bash
+# CRISPR Gene Editing Simulator
+streamlit run CRISPR.py
+
+# PRISM Clinical Pipeline
+streamlit run PRISM.py
+
+# COVID-19 Variant Tracker
+streamlit run COVID_19_Tracker.py
+
+# Protein Structure Analyzer
+streamlit run Protein_mutation_analyzer.py
+
+# Drug-Target Interaction Explorer
+streamlit run Drug_Target_Explorer.py
+```
+
+Each app will launch at `http://localhost:8501`.
+
+---
+
+## Project Structure
+
+```text
+Advance-bio_code/
+├── README.md                          # This file
+├── LICENSE                            # MIT License
+├── requirements.txt                   # Python dependencies
+├── config.py                          # Configuration (NOT committed)
+├── .gitignore                         # Git ignore rules
+│
+├── CRISPR.py                          # CRISPR Gene Editing Simulator
+├── PRISM.py                           # Clinical Pipeline Tool
+├── COVID_19_Tracker.py                # Viral Variant Tracker
+├── Protein_mutation_analyzer.py       # Protein Structure Tool
+├── Drug_Target_Explorer.py            # Drug-Target Interaction Tool
+│
+├── utils/
+│   ├── ncbi_fetcher.py               # NCBI GenBank queries
+│   ├── sequence_analysis.py          # Alignment and mutation detection
+│   ├── protein_structure.py          # PDB parsing and analysis
+│   ├── pam_scanner.py                # PAM motif scanning
+│   ├── clinical_filters.py           # Cohort filtering logic
+│   ├── drug_target_scorer.py         # Binding prediction
+│   └── mysql_logger.py               # Database logging
+│
+├── data/
+│   ├── reference_genomes/            # Reference sequences (FASTA)
+│   ├── mutation_databases/           # Known disease mutations
+│   ├── pdb_cache/                    # Cached protein structures
+│   └── sample_data/                  # Example datasets
+│
+└── docs/
+    ├── ARCHITECTURE.md               # System design
+    ├── API_GUIDE.md                  # API usage examples
+    └── CONTRIBUTING.md               # Contribution guidelines
+```
+
+---
+
+## Performance Benchmarks
+
+### Test Environment
+
+- **Device:** HP Laptop 15-fr0xxx
+- **Processor:** 13th Gen Intel Core i5-13420H (2.10 GHz, 8 cores)
+- **RAM:** 16 GB DDR4
+- **Storage:** 477 GB SSD
+- **GPU:** Intel UHD Graphics (integrated, unused)
+- **OS:** Windows 11 (64-bit)
+
+### PRISM Cohort Filtering Performance
+
+| Patients | Time | Memory |
+|----------|------|--------|
+| 500,000 | 7–8 sec | ~500 MB |
+| 1,000,000 | 10–15 sec | ~800 MB |
+| 2,000,000 | 20 sec | ~1.2 GB |
+| 5,000,000 | 50 sec | ~1.5 GB |
+| 10,000,000 | <2 min | ~1.9 GB |
+
+**Key Insight:** The bottleneck is Python object generation, not computational hardware. The pipeline is efficient enough for standard consumer hardware without requiring GPU acceleration or distributed processing.
+
+---
+
+## Scaling & Deployment
+
+### Local Development
+
+For development and testing with full features (including MySQL logging):
+
+```bash
+streamlit run PRISM.py
+```
+
+To increase dataset limits locally, edit the relevant `max_value` parameter in each tool's configuration.
+
+### Cloud Deployment (Streamlit Cloud)
+
+The project is deployed on Streamlit Cloud with the following limitations:
+
+- **Patient Limit:** 5,000 (vs. 10M locally) due to free-tier memory constraints
+- **Logging:** MySQL disabled (networking restrictions)
+- **Updates:** Re-deploy after git push
+
+Deploy your own fork:
+
+1. Fork this repository
+2. Connect to Streamlit Cloud: https://share.streamlit.io/
+3. Deploy from your fork
+
+### Production Deployment
+
+For large-scale production use:
+
+- **Local Execution:** Recommended for processing >1M records
+- **Database:** Set up MySQL server and update `config.py`
+- **Scaling:** Increase `max_value` parameters as needed
+- **Monitoring:** Check MySQL logs for query performance
+- **Caching:** Implement Redis for API response caching
+
+---
+
+## Troubleshooting
+
+### Issue: "ModuleNotFoundError: No module named 'streamlit'"
+
+**Solution:**
+```bash
+pip install --upgrade streamlit
+```
+
+### Issue: NCBI API Rate Limiting
+
+**Solution:** Add API key to `config.py`:
+```python
+ENTREZ_API_KEY = "your_api_key_here"
+```
+
+Register free at: https://www.ncbi.nlm.nih.gov/account/
+
+### Issue: MySQL Connection Refused
+
+**Solution:** Verify MySQL is running:
+```bash
+# Windows
+net start MySQL80
+
+# macOS
+brew services start mysql
+
+# Linux
+sudo systemctl start mysql
+```
+
+Or disable MySQL in `config.py`:
+```python
+USE_MYSQL = False
+```
+
+### Issue: Streamlit Port Already in Use
+
+**Solution:** Specify a different port:
+```bash
+streamlit run CRISPR.py --server.port 8502
+```
+
+### Issue: "Sequence Too Long" or Memory Errors
+
+**Solution:** Reduce dataset size in the app UI or locally in code:
+```python
+# In PRISM.py, change:
+max_value=10000000  # to:
+max_value=1000000   # for 1 million
+```
+
+---
+
+## Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. **Fork the repository**
+2. **Create a feature branch:** `git checkout -b feature/your-feature`
+3. **Make changes and test locally**
+4. **Commit:** `git commit -m "Add: your feature description"`
+5. **Push:** `git push origin feature/your-feature`
+6. **Open a Pull Request** with a clear description
+
+### Code Standards
+
+- Follow PEP 8 style guide
+- Add docstrings to functions
+- Test all changes locally before submitting
+- Update documentation as needed
+
+---
+
+## Notes & Disclaimer
+
+⚠️ **Important:** Results and predictions from Advance-bio_code are intended for **research and educational exploration only**. They should **NOT** be used as a substitute for:
+
+- Professional clinical diagnosis
+- Medical advice from qualified healthcare providers
+- Regulatory or therapeutic decision-making
+- Patient treatment planning
+
+Always validate computational predictions with experimental data and consult appropriate domain experts.
+
+---
+
+## Author
+
+**Sourabh Singh**
+
+- **GitHub:** [@CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
+- **LinkedIn:** [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh-7b1249434/)
+
+---
+
+## License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+You are free to:
+- ✅ Use commercially
+- ✅ Modify and distribute
+- ✅ Use privately
+
+You must:
+- 📋 Include license and copyright notice
+- 📋 State changes
+
+---
+
+## Acknowledgments
+
+- NCBI GenBank and Entrez API
+- Protein Data Bank (PDB) and structure tools
+- ChEMBL for drug-target data
+- GISAID for SARS-CoV-2 sequences
+- Streamlit for rapid web app development
+- Biopython community
+
+---
+
