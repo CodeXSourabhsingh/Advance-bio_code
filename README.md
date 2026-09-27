@@ -1,8 +1,6 @@
 # 🧬 Advance-bio_code
 
-A Python-based bioinformatics toolkit for sequence analysis, protein structure assessment, clinical cohort filtering, and viral mutation tracking.
-
-This repository brings together multiple interactive Streamlit applications for research, education, and exploratory analysis across molecular biology, structural biology, clinical data analysis, and drug discovery.
+> A connected bioinformatics portfolio for sequence analysis, protein structure assessment, clinical cohort filtering, and viral variant tracking.
 
 [![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-CRISPR%20Gene%20Editing%20Simulator-2ea44f?style=for-the-badge)](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/)
 [![PRISM Demo](https://img.shields.io/badge/📊%20PRISM%20Demo-Advanced%20Clinical%20Pipeline-2ea44f?style=for-the-badge)](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/)
@@ -12,200 +10,304 @@ This repository brings together multiple interactive Streamlit applications for 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 
----
-
-## Overview
-
-Advance-bio_code is designed to support several connected bioinformatics workflows:
-
-- CRISPR guide design and cleavage simulation
-- Clinical cohort filtering and trial-fit analysis
-- SARS-CoV-2 variant tracking and mutation scoring
-- Protein mutation impact assessment
-- Drug-target interaction exploration and prioritization
-
-The project is intended for research and educational exploration, not for clinical decision-making.
+Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together five integrated Python applications covering CRISPR editing workflows, clinical cohort analysis, viral variant surveillance, protein structure interpretation, and drug-target interaction screening.
 
 ---
 
-## Applications
+## 📋 Table of Contents
 
-### 1. CRISPR Gene Editing Simulator
-Purpose: design and evaluate CRISPR-Cas9 editing workflows.
-
-Features:
-- Fetches gene sequences from public databases
-- Scans DNA strands for PAM motifs
-- Simulates cleavage positions and mismatch patterns
-- Estimates editing outcomes and specificity
-- Exports guide design summaries
-
-Entry point: `CRISPR.py`
-
-### 2. PRISM Clinical Pipeline
-Purpose: filter and analyze large clinical or cohort datasets.
-
-Features:
-- Filters records by disease, mutation, age, stage, and biomarker conditions
-- Identifies candidate patient cohorts
-- Supports large-scale data exploration
-- Produces summary reports for trial-fit and biomarker investigations
-
-Entry point: `PRISM.py`
-
-### 3. COVID-19 Variant Mutation Tracker
-Purpose: monitor SARS-CoV-2 mutations and variant patterns.
-
-Features:
-- Retrieves viral sequence data
-- Detects substitutions, insertions, and deletions
-- Scores mutation risk and potential immune-escape impact
-- Tracks variant patterns over time
-
-Entry point: `COVID_19_Tracker.py`
-
-### 4. Protein Structure Analyzer
-Purpose: evaluate how sequence variants may affect protein function or structure.
-
-Features:
-- Retrieves protein structures from PDB
-- Maps mutation sites in 3D space
-- Estimates physicochemical changes
-- Highlights potential structural destabilization
-- Visualizes mutation hotspots
-
-Entry point: `Protein_mutation_analyzer.py`
-
-### 5. Drug-Target Interaction Explorer
-Purpose: explore candidate drug-target relationships.
-
-Features:
-- Retrieves compound and target metadata
-- Scores interaction potential
-- Helps prioritize binding hypotheses
-- Supports exploratory therapeutic analysis
-
-Entry point: `Drug_Target_Explorer.py`
+- [Project at a Glance](#project-at-a-glance)
+- [The Ecosystem](#-the-ecosystem)
+- [Tools & Features](#tools--features)
+- [Live Demo](#live-demo)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Performance Benchmarks](#performance-benchmarks)
+- [Scaling & Deployment](#scaling--deployment)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [Notes & Disclaimer](#notes--disclaimer)
+- [Author](#author)
+- [License](#license)
 
 ---
 
-## Workflow
+## Project at a Glance
 
-The applications are structured as an end-to-end research workflow:
+- **5 integrated interactive applications**
+- Sequence analysis using public genomic data
+- Mutation and cleavage simulation for CRISPR workflows
+- Clinical cohort filtering and trial-fit evaluation
+- Viral variant tracking for SARS-CoV-2
+- Protein structure impact assessment
+- Drug-target binding prediction and scoring
+- MySQL-powered audit logging and data persistence
+- Built with Python, Streamlit, Pandas, NumPy, and Biopython
+- Optimized for standard consumer hardware (tested on mid-range laptop)
+- Benchmark: Process 10 million patient records in under 2 minutes
+
+---
+
+## 🌍 The Ecosystem
 
 ```text
-CRISPR Simulator
-   ↓
-Protein Structure Analyzer
-   ↓
-PRISM Clinical Pipeline
-   ↓
-Drug-Target Explorer
-   ↓
-COVID-19 Variant Tracker
-   ↓
-Research insights and audit logging
+┌─────────────────────────────────────────────────────────────────┐
+│                    ADVANCE-BIO_CODE BIOINFORMATICS ECOSYSTEM             │
+└─────────────────────────────────────────────────────────────────┘
+
+                           ┌─────────────────────┐
+                           │   Data Collection   │
+                           │     & Analysis      │
+                           └──────────┬──────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+            ┌──────────────┐   ┌──────────────┐  ┌──────────────┐
+            │    NCBI      │   │  PubChem/    │  │     PDB      │
+            │  GenBank     │   │  ChEMBL      │  │  Database    │
+            └──────┬───────┘   └──────┬───────┘  └──────┬───────┘
+                   │                  │                 │
+        ┌──────────┴──────────┬───────┴────────┬────────┴─────────┐
+        │                     │                │                  │
+        ▼                     ▼                ▼                  ▼
+   ┌─────────────┐   ┌──────────────┐  ┌─────────────┐  ┌──────────────┐
+   │   CRISPR    │   │    PRISM     │  │  COVID-19   │  │   Protein    │
+   │ Gene Editor │   │  Clinical    │  │   Variant   │  │  Structure   │
+   │ Simulator   │   │  Pipeline    │  │  Tracker    │  │  Analyzer    │
+   └──────┬──────┘   └──────┬───────┘  └──────┬──────┘  └──────┬───────┘
+          │                 │                  │               │
+          └─────────────────┼──────────────────┼───────────────┘
+                            │
+                   ┌────────┴────────┐
+                   │                 │
+                   ▼                 ▼
+            ┌────────────────┐  ┌──────────────┐
+            │   Drug-Target  │  │    MySQL     │
+            │  Interaction   │  │    Logging   │
+            │   Explorer     │  │  & Audit     │
+            └────────────────┘  └──────────────┘
+                    │
+                    ▼
+        ┌──────────────────────────────┐
+        │  Research & Clinical Outputs │
+        │  - Mutation Classifications  │
+        │  - Trial Fit Predictions     │
+        │  - Variant Risk Scoring      │
+        │  - Structure Impact Analysis │
+        │  - Drug Binding Predictions  │
+        └──────────────────────────────┘
 ```
 
-This workflow connects:
-- sequence editing and mutation analysis
-- protein structure interpretation
-- cohort-level patient filtering
-- therapeutic prioritization
-- pathogen evolution tracking
+### **Workflow Integration**
+
+The five tools are designed as a connected research pipeline:
+
+```text
+1. CRISPR Simulator
+   ↓ (Identifies sequence mutations)
+
+2. Protein Structure Analyzer
+   ↓ (Evaluates structural impact)
+
+3. PRISM Clinical Pipeline
+   ↓ (Finds relevant patient cohorts)
+
+4. Drug-Target Explorer
+   ↓ (Predicts drug interactions)
+
+5. COVID-19 Tracker
+   └─→ (Extends analysis to viral evolution)
+
+   ALL RESULTS → MySQL Logging & Audit Trail
+```
+
+This creates a comprehensive research workflow spanning:
+- **Molecular Biology** — Sequence editing and analysis
+- **Structural Biology** — Protein impact assessment
+- **Clinical Relevance** — Patient cohort identification
+- **Pharmacology** — Drug-target interactions
+- **Viral Surveillance** — Variant monitoring and mutation scoring
 
 ---
 
-## Live Demos
+## Tools & Features
 
-| Tool | Demo |
-|------|------|
+### 🧬 CRISPR Gene Editing Simulator
+
+**Purpose:** Design and simulate CRISPR-Cas9 gene editing workflows
+
+- Fetches real gene sequences from NCBI GenBank
+- Scans both DNA strands for PAM motifs (NGG, NGG variants)
+- Calculates mismatch patterns and specificity scores
+- Simulates Cas9 cleavage and off-target potential
+- Classifies likely DNA repair outcomes (NHEJ, HDR)
+- Exports guide RNA designs and cleavage predictions
+
+**Entry Point:** `CRISPR.py`
+
+---
+
+### 🧪 PRISM — Advanced Clinical Pipeline
+
+**Purpose:** Filter and analyze large patient cohorts for trial-fit and biomarker discovery
+
+- Fetches public clinical trial metadata and patient cohorts
+- Filters by disease, stage, age, genetic mutations, biomarkers
+- Identifies statistical outliers and potential trial-fit candidates
+- Supports analysis of 500K–10M patient records
+- Benchmarked for speed: 10M patients in <2 minutes
+- Generates cohort reports with demographic and genetic breakdowns
+- MySQL integration for full audit and result persistence
+
+**Entry Point:** `PRISM.py`
+
+---
+
+### 🦠 COVID-19 Variant Mutation Tracker
+
+**Purpose:** Monitor SARS-CoV-2 evolution and assess variant risk
+
+- Fetches latest SARS-CoV-2 sequence data from GISAID/NCBI
+- Aligns Spike protein region against Wuhan-Hu-1 reference genome
+- Detects substitutions, insertions, and deletions
+- Scores mutations for immune escape potential (ACE2 binding, epitope impact)
+- Ranks transmission risk using phylogenetic distance and prevalence
+- Tracks emerging variants and mutation patterns over time
+
+**Entry Point:** `COVID_19_Tracker.py`
+
+---
+
+### 🧫 Protein Structure Analyzer
+
+**Purpose:** Predict how mutations affect protein structure and function
+
+- Fetches protein structures from the Protein Data Bank (PDB)
+- Locates mutation sites on protein chains in 3D space
+- Calculates physicochemical property changes (charge, polarity, hydrophobicity)
+- Estimates structural destabilization risk (RSA, DSSP properties)
+- Classifies mutations: benign, disease-associated, or deleterious
+- Interactive 3D visualization of mutation sites
+- Comparison against known disease databases
+
+**Entry Point:** `Protein_mutation_analyzer.py`
+
+---
+
+### 💊 Drug-Target Interaction Explorer
+
+**Purpose:** Predict drug-target binding affinity and mechanism
+
+- Fetches drug-target binding data from ChEMBL database
+- Classifies interactions by binding strength (IC50, Ki, Kd values)
+- Visualizes primary protein targets in 3D using PDB structures
+- Supports target filtering by gene, protein family, or pathway
+- Scoring framework for therapeutic potential and off-target risk
+- Full audit trail logging to MySQL for regulatory compliance
+- Enables drug repurposing and polypharmacology discovery
+
+**Entry Point:** `Drug_Target_Explorer.py`
+
+---
+
+## Live Demo
+
+Try the deployed applications here:
+
+| Tool | Live Demo |
+|------|-----------|
 | 🧬 CRISPR Gene Editing Simulator | [Launch Demo](https://advance-biocode-whdkzngbtm3ojrz4du4kgc.streamlit.app/) |
 | 🧪 PRISM Clinical Pipeline | [Launch Demo](https://advance-biocode-95t2yzvng6j7hqordph6bc.streamlit.app/) |
 | 🦠 COVID-19 Variant Tracker | [Launch Demo](https://advance-biocode-2dvc5hdwriquhcezve3wyz.streamlit.app/) |
 | 🧫 Protein Mutation Analyzer | [Launch Demo](https://advance-biocode-dmogu9dlhr6l5kjm8peqfz.streamlit.app/) |
 | 💊 Drug-Target Interaction Explorer | [Launch Demo](https://advance-biocode-ewjbtfap7ensteshckapp8.streamlit.app/) |
 
-> Note: cloud-hosted Streamlit apps may run without full local features such as persistent MySQL logging or larger-scale dataset processing.
+> **⚠️ Cloud Deployment Note:** The Streamlit Cloud deployment runs without MySQL logging due to networking limitations. For the complete pipeline with persistent logging, run locally (see [Quick Start](#quick-start)).
 
 ---
 
 ## Tech Stack
 
-| Technology | Purpose |
-|-----------|---------|
-| Python 3.13+ | Core application runtime |
-| Streamlit | Interactive web dashboards |
-| Pandas | Data processing and tabular analysis |
-| NumPy | Numerical computation |
-| Matplotlib | Visualization |
-| Biopython | Sequence and structure analysis |
-| Requests | API access |
-| MySQL Connector | Optional database logging |
-| Py3Dmol | 3D molecular visualization |
+| Technology | Version | Role |
+|---|---|---|
+| **Python** | 3.13+ | Core runtime and computational engine |
+| **Streamlit** | Latest | Interactive web dashboards and UI |
+| **Pandas** | Latest | Tabular data handling and analysis |
+| **NumPy** | Latest | Numerical arrays and vectorized operations |
+| **Matplotlib** | Latest | Static plotting and data visualization |
+| **Biopython** | 1.80+ | Sequence analysis, alignment, structure parsing |
+| **Requests** | Latest | HTTP client for API access |
+| **MySQL Connector** | 8.0+ | Database connectivity and logging |
+| **Py3Dmol** | Latest | Interactive 3D protein structure rendering |
 
-External data sources:
-- NCBI Entrez
-- Protein Data Bank (PDB)
-- ChEMBL / PubChem
-- GISAID / NCBI viral data
+**External APIs:**
+- NCBI Entrez (GenBank, GeneID, Protein)
+- PubChem/ChEMBL (Drug-target data)
+- Protein Data Bank (PDB structures)
+- GISAID/NCBI (SARS-CoV-2 sequences)
 
 ---
 
 ## Prerequisites
 
-### System requirements
-- Python 3.13 or newer
-- Windows, macOS, or Linux
-- 4 GB RAM minimum; 8–16 GB recommended
-- 500 MB+ free storage
-- No GPU required
+### System Requirements
 
-### Software dependencies
-- Git
-- pip
-- MySQL Server 8.0+ (optional, for local logging)
+- **Python:** 3.13 or higher
+- **OS:** Windows, macOS, or Linux
+- **RAM:** 4 GB minimum (16 GB recommended for PRISM scaling)
+- **Storage:** 500 MB for code and dependencies
+- **GPU:** Not required (CPU-based computation)
 
-### API access
-- NCBI Entrez account/email for public sequence queries
-- MySQL credentials if local database logging is enabled
+### Software Dependencies
+
+- Git (for cloning the repository)
+- pip (Python package manager)
+- MySQL Server 8.0+ (optional, for logging)
+
+### API Requirements
+
+- **NCBI Entrez Email:** Free NCBI account (register at [NCBI](https://www.ncbi.nlm.nih.gov/))
+- **MySQL Credentials:** If using database logging locally
 
 ---
 
 ## Quick Start
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/CodeXSourabhsingh/Advance-bio_code.git
 cd Advance-bio_code
 ```
 
-### 2. Create a virtual environment
+### 2. Create Virtual Environment (Recommended)
 
 ```bash
-# Windows
+# On Windows
 python -m venv venv
 venv\Scripts\activate
 
-# macOS / Linux
+# On macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-If you want to install manually:
+Or install manually:
 
 ```bash
 pip install biopython pandas numpy matplotlib streamlit mysql-connector-python requests py3dmol
 ```
 
-### 4. Create configuration file
+### 4. Configure the Application
 
 Create a `config.py` file in the project root:
 
@@ -220,26 +322,25 @@ MYSQL_PORT = 3306
 ENTREZ_EMAIL = "your.email@example.com"
 ENTREZ_API_KEY = "optional_ncbi_api_key"
 
+# Streamlit Cloud deployment (set to False locally)
 USE_CLOUD_DEPLOYMENT = False
 ```
 
-Important:
-- Do not commit real credentials
-- Add `config.py` to `.gitignore`
-
-Example:
+**⚠️ Security:** Never commit `config.py` with real credentials. Add it to `.gitignore`:
 
 ```bash
 echo "config.py" >> .gitignore
 ```
 
-### 5. Verify installation
+### 5. Verify Installation
+
+Test that all dependencies are installed:
 
 ```bash
-python -c "import streamlit, biopython, pandas, numpy; print('Dependencies loaded successfully')"
+python -c "import streamlit, biopython, pandas, numpy; print('✓ All dependencies loaded')"
 ```
 
-### 6. Run the applications
+### 6. Run an Application
 
 From the project root:
 
@@ -260,11 +361,7 @@ streamlit run Protein_mutation_analyzer.py
 streamlit run Drug_Target_Explorer.py
 ```
 
-Each app launches locally on:
-
-```text
-http://localhost:8501
-```
+Each app will launch at `http://localhost:8501`.
 
 ---
 
@@ -272,107 +369,125 @@ http://localhost:8501
 
 ```text
 Advance-bio_code/
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── config.py
-├── .gitignore
+├── README.md                          # This file
+├── LICENSE                            # MIT License
+├── requirements.txt                   # Python dependencies
+├── config.py                          # Configuration (NOT committed)
+├── .gitignore                         # Git ignore rules
 │
-├── CRISPR.py
-├── PRISM.py
-├── COVID_19_Tracker.py
-├── Protein_mutation_analyzer.py
-├── Drug_Target_Explorer.py
+├── CRISPR.py                          # CRISPR Gene Editing Simulator
+├── PRISM.py                           # Clinical Pipeline Tool
+├── COVID_19_Tracker.py                # Viral Variant Tracker
+├── Protein_mutation_analyzer.py       # Protein Structure Tool
+├── Drug_Target_Explorer.py            # Drug-Target Interaction Tool
 │
 ├── utils/
-│   ├── ncbi_fetcher.py
-│   ├── sequence_analysis.py
-│   ├── protein_structure.py
-│   ├── pam_scanner.py
-│   ├── clinical_filters.py
-│   ├── drug_target_scorer.py
-│   └── mysql_logger.py
+│   ├── ncbi_fetcher.py               # NCBI GenBank queries
+│   ├── sequence_analysis.py          # Alignment and mutation detection
+│   ├── protein_structure.py          # PDB parsing and analysis
+│   ├── pam_scanner.py                # PAM motif scanning
+│   ├── clinical_filters.py           # Cohort filtering logic
+│   ├── drug_target_scorer.py         # Binding prediction
+│   └── mysql_logger.py               # Database logging
 │
 ├── data/
-│   ├── reference_genomes/
-│   ├── mutation_databases/
-│   ├── pdb_cache/
-│   └── sample_data/
+│   ├── reference_genomes/            # Reference sequences (FASTA)
+│   ├── mutation_databases/           # Known disease mutations
+│   ├── pdb_cache/                    # Cached protein structures
+│   └── sample_data/                  # Example datasets
 │
 └── docs/
-    ├── ARCHITECTURE.md
-    ├── API_GUIDE.md
-    └── CONTRIBUTING.md
+    ├── ARCHITECTURE.md               # System design
+    ├── API_GUIDE.md                  # API usage examples
+    └── CONTRIBUTING.md               # Contribution guidelines
 ```
 
 ---
 
-## Typical Use Cases
+## Performance Benchmarks
 
-- Investigate CRISPR guide candidates for a target gene
-- Compare mutation patterns across a protein sequence
-- Filter clinical records by disease and biomarker criteria
-- Rank potential drug-target candidates
-- Monitor and assess emerging SARS-CoV-2 variants
+### Test Environment
+
+- **Device:** HP Laptop 15-fr0xxx
+- **Processor:** 13th Gen Intel Core i5-13420H (2.10 GHz, 8 cores)
+- **RAM:** 16 GB DDR4
+- **Storage:** 477 GB SSD
+- **GPU:** Intel UHD Graphics (integrated, unused)
+- **OS:** Windows 11 (64-bit)
+
+### PRISM Cohort Filtering Performance
+
+| Patients | Time | Memory |
+|----------|------|--------|
+| 500,000 | 7–8 sec | ~500 MB |
+| 1,000,000 | 10–15 sec | ~800 MB |
+| 2,000,000 | 20 sec | ~1.2 GB |
+| 5,000,000 | 50 sec | ~1.5 GB |
+| 10,000,000 | <2 min | ~1.9 GB |
+
+**Key Insight:** The bottleneck is Python object generation, not computational hardware. The pipeline is efficient enough for standard consumer hardware without requiring GPU acceleration or distributed processing.
 
 ---
 
-## Benchmarks and Performance Notes
+## Scaling & Deployment
 
-This project is intended for exploratory and research-scale workloads. Local performance depends on machine configuration, dataset size, and API latency.
+### Local Development
 
-Example local-scale benchmark areas:
-- large cohort filtering
-- sequence scanning for motif detection
-- mutation scoring
-- protein feature evaluation
+For development and testing with full features (including MySQL logging):
 
-These use standard CPU-based processing, so they are suitable for laptops and moderate workstation environments without requiring GPU acceleration.
+```bash
+streamlit run PRISM.py
+```
 
-> Benchmark numbers should be interpreted as environment-specific estimates rather than guaranteed production metrics.
+To increase dataset limits locally, edit the relevant `max_value` parameter in each tool's configuration.
 
----
+### Cloud Deployment (Streamlit Cloud)
 
-## Deployment Notes
+The project is deployed on Streamlit Cloud with the following limitations:
 
-### Local development
-For full functionality, run locally with:
-- local data access
-- MySQL logging enabled
-- larger dataset processing
+- **Patient Limit:** 5,000 (vs. 10M locally) due to free-tier memory constraints
+- **Logging:** MySQL disabled (networking restrictions)
+- **Updates:** Re-deploy after git push
 
-### Streamlit Cloud
-The live cloud deployment is useful for demos and lightweight usage, but may have limitations such as:
-- limited memory compared to local machines
-- disabled or restricted MySQL connectivity
-- lower dataset capacity
+Deploy your own fork:
 
-### Production use
-For larger-scale or production workflows:
-- run locally or in a managed environment
-- configure MySQL properly
-- monitor API rate limits
-- validate results against reliable domain datasets before use in decision-making
+1. Fork this repository
+2. Connect to Streamlit Cloud: https://share.streamlit.io/
+3. Deploy from your fork
+
+### Production Deployment
+
+For large-scale production use:
+
+- **Local Execution:** Recommended for processing >1M records
+- **Database:** Set up MySQL server and update `config.py`
+- **Scaling:** Increase `max_value` parameters as needed
+- **Monitoring:** Check MySQL logs for query performance
+- **Caching:** Implement Redis for API response caching
 
 ---
 
 ## Troubleshooting
 
-### ModuleNotFoundError: No module named 'streamlit'
+### Issue: "ModuleNotFoundError: No module named 'streamlit'"
+
+**Solution:**
 ```bash
 pip install --upgrade streamlit
 ```
 
-### NCBI API rate limiting
-Add your API key in `config.py`:
+### Issue: NCBI API Rate Limiting
 
+**Solution:** Add API key to `config.py`:
 ```python
 ENTREZ_API_KEY = "your_api_key_here"
 ```
 
-### MySQL connection refused
-Verify the service is running:
+Register free at: https://www.ncbi.nlm.nih.gov/account/
 
+### Issue: MySQL Connection Refused
+
+**Solution:** Verify MySQL is running:
 ```bash
 # Windows
 net start MySQL80
@@ -384,49 +499,59 @@ brew services start mysql
 sudo systemctl start mysql
 ```
 
-Or disable database logging in config if you do not need it.
+Or disable MySQL in `config.py`:
+```python
+USE_MYSQL = False
+```
 
-### Streamlit port already in use
+### Issue: Streamlit Port Already in Use
+
+**Solution:** Specify a different port:
 ```bash
 streamlit run CRISPR.py --server.port 8502
 ```
 
-### Memory or sequence length issues
-Reduce dataset size in the app UI or by adjusting local limits in the code.
+### Issue: "Sequence Too Long" or Memory Errors
+
+**Solution:** Reduce dataset size in the app UI or locally in code:
+```python
+# In PRISM.py, change:
+max_value=10000000  # to:
+max_value=1000000   # for 1 million
+```
 
 ---
 
 ## Contributing
 
-Contributions are welcome.
+We welcome contributions! Please follow these steps:
 
-### Suggested workflow
-1. Fork the repository
-2. Create a new branch
-3. Make your changes
-4. Test locally
-5. Commit with a clear message
-6. Open a pull request
+1. **Fork the repository**
+2. **Create a feature branch:** `git checkout -b feature/your-feature`
+3. **Make changes and test locally**
+4. **Commit:** `git commit -m "Add: your feature description"`
+5. **Push:** `git push origin feature/your-feature`
+6. **Open a Pull Request** with a clear description
 
-### Code standards
-- Follow PEP 8
-- Add docstrings where appropriate
-- Keep functions modular and readable
-- Update documentation when behavior changes
+### Code Standards
+
+- Follow PEP 8 style guide
+- Add docstrings to functions
+- Test all changes locally before submitting
+- Update documentation as needed
 
 ---
 
 ## Notes & Disclaimer
 
-⚠️ Advance-bio_code is for research and educational exploration only.
+⚠️ **Important:** Results and predictions from Advance-bio_code are intended for **research and educational exploration only**. They should **NOT** be used as a substitute for:
 
-It should not be used as a substitute for:
-- professional clinical diagnosis
-- medical advice
-- therapeutic decision-making
-- regulatory or patient-care planning
+- Professional clinical diagnosis
+- Medical advice from qualified healthcare providers
+- Regulatory or therapeutic decision-making
+- Patient treatment planning
 
-All computational outputs should be validated with experimental data and domain expertise.
+Always validate computational predictions with experimental data and consult appropriate domain experts.
 
 ---
 
@@ -434,33 +559,33 @@ All computational outputs should be validated with experimental data and domain 
 
 **Sourabh Singh**
 
-- GitHub: [@CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
-- LinkedIn: [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh-7b1249434/)
+- **GitHub:** [@CodeXSourabhsingh](https://github.com/CodeXSourabhsingh)
+- **LinkedIn:** [Sourabh Singh](https://www.linkedin.com/in/sourabh-singh-7b1249434/)
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 You are free to:
-- use commercially
-- modify and distribute
-- use privately
+- ✅ Use commercially
+- ✅ Modify and distribute
+- ✅ Use privately
 
 You must:
-- include the license and copyright notice
-- state changes made
+- 📋 Include license and copyright notice
+- 📋 State changes
 
 ---
 
 ## Acknowledgments
 
 - NCBI GenBank and Entrez API
-- Protein Data Bank (PDB)
-- ChEMBL / PubChem
-- GISAID and public viral sequence resources
-- Streamlit community
-- Biopython contributors
+- Protein Data Bank (PDB) and structure tools
+- ChEMBL for drug-target data
+- GISAID for SARS-CoV-2 sequences
+- Streamlit for rapid web app development
+- Biopython community
 
 ---
