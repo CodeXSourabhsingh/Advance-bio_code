@@ -153,7 +153,7 @@ This creates a comprehensive research workflow spanning:
 - Classifies likely DNA repair outcomes (NHEJ, HDR)
 - Exports guide RNA designs and cleavage predictions
 
-**Entry Point:** `CRISPR.py`
+**Entry Point:** `CRISPR_simulator.py`
 
 ---
 
@@ -169,7 +169,7 @@ This creates a comprehensive research workflow spanning:
 - Generates cohort reports with demographic and genetic breakdowns
 - MySQL integration for full audit and result persistence
 
-**Entry Point:** `PRISM.py`
+**Entry Point:** `PRISM .py`
 
 ---
 
@@ -184,7 +184,7 @@ This creates a comprehensive research workflow spanning:
 - Ranks transmission risk using phylogenetic distance and prevalence
 - Tracks emerging variants and mutation patterns over time
 
-**Entry Point:** `COVID_19_Tracker.py`
+**Entry Point:** `covid mutation tracker.py`
 
 ---
 
@@ -200,7 +200,7 @@ This creates a comprehensive research workflow spanning:
 - Interactive 3D visualization of mutation sites
 - Comparison against known disease databases
 
-**Entry Point:** `Protein_mutation_analyzer.py`
+**Entry Point:** `Protein mutaion analyzer.py`
 
 ---
 
@@ -216,7 +216,7 @@ This creates a comprehensive research workflow spanning:
 - Full audit trail logging to MySQL for regulatory compliance
 - Enables drug repurposing and polypharmacology discovery
 
-**Entry Point:** `Drug_Target_Explorer.py`
+**Entry Point:** `Drug mutation tracker.py`
 
 ---
 
@@ -232,7 +232,7 @@ This creates a comprehensive research workflow spanning:
 - Supports multiple sample comparison and longitudinal tracking
 - Automated hypothesis testing for significant diversity shifts
 
-**Entry Point:** `Microbiome_Dashboard.py`
+**Entry Point:** `Microbiome diversity.py`
 
 ---
 
@@ -370,22 +370,22 @@ From the project root:
 
 ```bash
 # CRISPR Gene Editing Simulator
-streamlit run CRISPR.py
+streamlit run CRISPR_simulator.py
 
 # PRISM Clinical Pipeline
-streamlit run PRISM.py
+streamlit run "PRISM .py"
 
 # COVID-19 Variant Tracker
-streamlit run COVID_19_Tracker.py
+streamlit run "covid mutation tracker.py"
 
 # Protein Structure Analyzer
-streamlit run Protein_mutation_analyzer.py
+streamlit run "Protein mutaion analyzer.py"
 
 # Drug-Target Interaction Explorer
-streamlit run Drug_Target_Explorer.py
+streamlit run "Drug mutation tracker.py"
 
 # Microbiome Diversity Dashboard
-streamlit run Microbiome_Dashboard.py
+streamlit run "Microbiome diversity.py"
 ```
 
 Each app will launch at `http://localhost:8501`.
@@ -402,12 +402,12 @@ Advance-bio_code/
 ├── config.py                          # Configuration (NOT committed)
 ├── .gitignore                         # Git ignore rules
 │
-├── CRISPR.py                          # CRISPR Gene Editing Simulator
-├── PRISM.py                           # Clinical Pipeline Tool
-├── COVID_19_Tracker.py                # Viral Variant Tracker
-├── Protein_mutation_analyzer.py       # Protein Structure Tool
-├── Drug_Target_Explorer.py            # Drug-Target Interaction Tool
-├── Microbiome_Dashboard.py            # Microbiome Diversity Analysis
+├── CRISPR_simulator.py                # CRISPR Gene Editing Simulator
+├── PRISM .py                          # Clinical Pipeline Tool
+├── covid mutation tracker.py          # Viral Variant Tracker
+├── Protein mutaion analyzer.py        # Protein Structure Tool
+├── Drug mutation tracker.py           # Drug-Target Interaction Tool
+├── Microbiome diversity.py            # Microbiome Diversity Analysis
 │
 ├── utils/
 │   ├── ncbi_fetcher.py               # NCBI GenBank queries
@@ -474,7 +474,7 @@ Advance-bio_code/
 For development and testing with full features (including MySQL logging):
 
 ```bash
-streamlit run PRISM.py
+streamlit run "Microbiome diversity.py"
 ```
 
 To increase dataset limits locally, edit the relevant `max_value` parameter in each tool's configuration.
@@ -546,14 +546,14 @@ USE_MYSQL = False
 
 **Solution:** Specify a different port:
 ```bash
-streamlit run CRISPR.py --server.port 8502
+streamlit run CRISPR_simulator.py --server.port 8502
 ```
 
 ### Issue: "Sequence Too Long" or Memory Errors
 
 **Solution:** Reduce dataset size in the app UI or locally in code:
 ```python
-# In PRISM.py, change:
+# In PRISM .py, change:
 max_value=10000000  # to:
 max_value=1000000   # for 1 million
 ```
