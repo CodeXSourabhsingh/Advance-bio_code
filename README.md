@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 
-Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together five integrated Python applications covering CRISPR editing workflows, clinical cohort analysis, viral variant surveillance, protein structure interpretation, and drug-target interaction screening.
+Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together five integrated bioinformatics workflows spanning genomic editing, clinical cohort analysis, viral surveillance, structural mutation interpretation, and drug-target prediction.
 
 ---
 
@@ -36,13 +36,14 @@ Advance-bio_code is a Python-based bioinformatics toolkit designed for research,
 
 ## Project at a Glance
 
-- **5 integrated interactive applications**
+- **6 integrated interactive applications**
 - Sequence analysis using public genomic data
 - Mutation and cleavage simulation for CRISPR workflows
 - Clinical cohort filtering and trial-fit evaluation
 - Viral variant tracking for SARS-CoV-2
 - Protein structure impact assessment
 - Drug-target binding prediction and scoring
+- Microbiome diversity analysis and ecological profiling
 - MySQL-powered audit logging and data persistence
 - Built with Python, Streamlit, Pandas, NumPy, and Biopython
 - Optimized for standard consumer hardware (tested on mid-range laptop)
@@ -66,10 +67,10 @@ Advance-bio_code is a Python-based bioinformatics toolkit designed for research,
                     │                 │                 │
                     ▼                 ▼                 ▼
             ┌──────────────┐   ┌──────────────┐  ┌──────────────┐
-            │    NCBI      │   │  PubChem/    │  │     PDB      │
-            │  GenBank     │   │  ChEMBL      │  │  Database    │
-            └──────┬───────┘   └──────┬───────┘  └──────┬───────┘
-                   │                  │                 │
+            │    NCBI      │   │  PubChem/    │   │     PDB      │
+            │  GenBank     │   │  ChEMBL      │   │  Database    │
+            └──────┬───────┘   └──────┬───────┘   └──────┬───────┘
+                   │                  │                  │
         ┌──────────┴──────────┬───────┴────────┬────────┴─────────┐
         │                     │                │                  │
         ▼                     ▼                ▼                  ▼
@@ -98,6 +99,8 @@ Advance-bio_code is a Python-based bioinformatics toolkit designed for research,
         │  - Variant Risk Scoring      │
         │  - Structure Impact Analysis │
         │  - Drug Binding Predictions  │
+        │  - Microbiome Diversity      │
+        │    Profiling & Clustering    │
         └──────────────────────────────┘
 ```
 
@@ -119,7 +122,10 @@ The five tools are designed as a connected research pipeline:
    ↓ (Predicts drug interactions)
 
 5. COVID-19 Tracker
-   └─→ (Extends analysis to viral evolution)
+   ↓ (Tracks viral evolution)
+
+6. Microbiome Diversity Dashboard
+   └─→ (Profiles microbial community structure)
 
    ALL RESULTS → MySQL Logging & Audit Trail
 ```
@@ -130,6 +136,7 @@ This creates a comprehensive research workflow spanning:
 - **Clinical Relevance** — Patient cohort identification
 - **Pharmacology** — Drug-target interactions
 - **Viral Surveillance** — Variant monitoring and mutation scoring
+- **Microbiome Ecology** — Community diversity quantification and sample comparison
 
 ---
 
@@ -213,6 +220,21 @@ This creates a comprehensive research workflow spanning:
 
 ---
 
+### 🧫 Microbiome Diversity Dashboard
+
+**Purpose:** Quantify and compare microbial community structure across environmental or clinical samples
+
+- Calculates alpha diversity metrics including Shannon, Simpson, Chao1, and Pielou evenness
+- Computes beta diversity using Bray-Curtis dissimilarity
+- Visualizes sample clustering via principal coordinates analysis (PCoA) using PCA-based dimensionality reduction
+- Summarizes ecological diversity trends for microbiome research and biomarker exploration
+- Logs diversity indices to MySQL for reproducibility and auditability
+- Supports comparative analysis across treatment groups, time points, or sample sources
+
+**Entry Point:** `Microbiome_Diversity_Dashboard.py`
+
+---
+
 ## Live Demo
 
 Try the deployed applications here:
@@ -242,6 +264,7 @@ Try the deployed applications here:
 | **Requests** | Latest | HTTP client for API access |
 | **MySQL Connector** | 8.0+ | Database connectivity and logging |
 | **Py3Dmol** | Latest | Interactive 3D protein structure rendering |
+| **Scikit-learn** | Latest | Dimensionality reduction, clustering, and ecology analysis |
 
 **External APIs:**
 - NCBI Entrez (GenBank, GeneID, Protein)
@@ -304,7 +327,7 @@ pip install -r requirements.txt
 Or install manually:
 
 ```bash
-pip install biopython pandas numpy matplotlib streamlit mysql-connector-python requests py3dmol
+pip install biopython pandas numpy matplotlib streamlit mysql-connector-python requests py3dmol scikit-learn
 ```
 
 ### 4. Configure the Application
@@ -337,7 +360,7 @@ echo "config.py" >> .gitignore
 Test that all dependencies are installed:
 
 ```bash
-python -c "import streamlit, biopython, pandas, numpy; print('✓ All dependencies loaded')"
+python -c "import streamlit, biopython, pandas, numpy, sklearn; print('✓ All dependencies loaded')"
 ```
 
 ### 6. Run an Application
@@ -359,6 +382,9 @@ streamlit run Protein_mutation_analyzer.py
 
 # Drug-Target Interaction Explorer
 streamlit run Drug_Target_Explorer.py
+
+# Microbiome Diversity Dashboard
+streamlit run Microbiome_Diversity_Dashboard.py
 ```
 
 Each app will launch at `http://localhost:8501`.
@@ -380,6 +406,7 @@ Advance-bio_code/
 ├── COVID_19_Tracker.py                # Viral Variant Tracker
 ├── Protein_mutation_analyzer.py       # Protein Structure Tool
 ├── Drug_Target_Explorer.py            # Drug-Target Interaction Tool
+├── Microbiome_Diversity_Dashboard.py  # Microbiome Diversity Dashboard
 │
 ├── utils/
 │   ├── ncbi_fetcher.py               # NCBI GenBank queries
@@ -388,12 +415,14 @@ Advance-bio_code/
 │   ├── pam_scanner.py                # PAM motif scanning
 │   ├── clinical_filters.py           # Cohort filtering logic
 │   ├── drug_target_scorer.py         # Binding prediction
+│   ├── microbiome_diversity.py       # Alpha/beta diversity and ecological analysis
 │   └── mysql_logger.py               # Database logging
 │
 ├── data/
 │   ├── reference_genomes/            # Reference sequences (FASTA)
 │   ├── mutation_databases/           # Known disease mutations
 │   ├── pdb_cache/                    # Cached protein structures
+│   ├── microbiome_samples/           # Example microbiome abundance tables
 │   └── sample_data/                  # Example datasets
 │
 └── docs/
@@ -425,7 +454,7 @@ Advance-bio_code/
 | 5,000,000 | 50 sec | ~1.5 GB |
 | 10,000,000 | <2 min | ~1.9 GB |
 
-**Key Insight:** The bottleneck is Python object generation, not computational hardware. The pipeline is efficient enough for standard consumer hardware without requiring GPU acceleration or distributed processing.
+**Key Insight:** The bottleneck is Python object generation, not computational hardware. The pipeline is efficient enough for standard consumer hardware without requiring GPU acceleration or distributed computing.
 
 ---
 
@@ -587,5 +616,6 @@ You must:
 - GISAID for SARS-CoV-2 sequences
 - Streamlit for rapid web app development
 - Biopython community
+- Scikit-learn for ecological and dimensionality reduction workflows
 
 ---
