@@ -12,6 +12,12 @@
 
 Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together five integrated interactive applications with comprehensive data analysis and visualization capabilities.
 
+## 🚀 Quick Summary
+
+Advance-bio_code is a research-focused bioinformatics platform that combines genomics, clinical analytics, structural biology, microbiome analysis, and drug discovery in one Python-based toolkit. It includes interactive Streamlit apps for CRISPR guide design, clinical cohort filtering, COVID-19 variant tracking, protein mutation assessment, and microbiome diversity analysis. The project integrates public bioinformatics datasets from NCBI, PDB, ChEMBL, GISAID, and related sources, and it supports MySQL-backed logging for reproducible, auditable analysis workflows.
+
+This repository is built for scientists, students, and developers who want a practical, end-to-end toolkit to explore biological data, identify patterns, compare samples, and generate interpretable outputs for research and educational use.
+
 ---
 
 ## 📋 Table of Contents
