@@ -15,6 +15,43 @@ Advance-bio_code is a Python-based bioinformatics toolkit designed for research,
 
 ---
 
+5 tools. 1 ecosystem. 0 automated decisions.
+
+Every tool follows the same architecture:
+fetch real data → clean with Pandas → log to MySQL → visualize in Streamlit.
+
+The pipeline runs like this:
+CRISPR → Protein → Drug-Target → PRISM → COVID.
+
+Five tools. One chain. Real data at every stage.
+
+But the design choice that matters is human-in-the-loop.
+
+A researcher runs CRISPR, finds the mutation. Reads the output. Decides what matters.
+
+Runs Protein Analyzer, validates the mutation, sees the structural damage. Decides again.
+
+Runs Drug-Target, maps the binding data, sees what treats it. Decides again.
+
+Runs PRISM, filters the trial cohort. Decides again.
+
+Runs COVID Variant Tracker, tracks how the mutation spreads. Decides again.
+
+Five tools. Five decisions the researcher makes.
+
+That's not a limitation of the system.
+That's the design.
+
+In clinical data, judgment can't be automated.
+
+A tool that spits out a final answer without human review isn't innovation — it's a liability.
+
+Human-in-the-loop isn't the missing piece.
+
+It's the whole point.
+
+Built for teams that refuse to automate the final call.
+
 ## 📋 Table of Contents
 
 - [Project at a Glance](#project-at-a-glance)
