@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 
-Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together six integrated bioinformatics workflows spanning genomic editing, clinical cohort analysis, viral surveillance, structural mutation interpretation, drug-target prediction, and microbiome ecological profiling.
+Advance-bio_code is a Python-based bioinformatics toolkit designed for research, learning, and exploration across multiple layers of molecular and clinical analysis. The project brings together six integrated applications for genomic analysis, protein evaluation, cohort screening, and viral surveillance.
 
 ---
 
@@ -62,6 +62,7 @@ Built for teams that refuse to automate the final call.
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
 - [Project Structure](#project-structure)
+- [Validation](#validation)
 - [Performance Benchmarks](#performance-benchmarks)
 - [Scaling & Deployment](#scaling--deployment)
 - [Troubleshooting](#troubleshooting)
@@ -112,7 +113,7 @@ Built for teams that refuse to automate the final call.
         ┌──────────┴──────────┬───────┴────────┬────────┴─────────┐
         │                     │                │                  │
         ▼                     ▼                ▼                  ▼
-   ┌─────────────┐   ┌──────────────┐  ┌─────────────┐  ┌──────────────┐
+   ┌─────────────┐   ┌──────────────┐  ┌─────���───────┐  ┌──────────────┐
    │   CRISPR    │   │    PRISM     │  │  COVID-19   │  │   Protein    │
    │ Gene Editor │   │  Clinical    │  │   Variant   │  │  Structure   │
    │ Simulator   │   │  Pipeline    │  │  Tracker    │  │  Analyzer    │
@@ -472,6 +473,49 @@ Advance-bio_code/
 
 ---
 
+## Validation
+
+### PRISM Clinical Pipeline Validation
+
+PRISM's cohort filtering, statistics, and outlier detection logic is isolated in `prism_logic.py` and verified with 12 pytest tests. The tests cover:
+
+- Disease filtering (single and multi-select)
+- Stage filtering (exact match)
+- Age boundaries (inclusive at min and max)
+- Combined filters (disease + stage + age)
+- Empty-result handling
+- CRISPR mutation filter (match and no-filter)
+- Mean / SD computation against hand-calculated values
+- Outlier detection with injected known outliers
+
+Run with:
+
+```bash
+python -m pytest test_prism.py -v
+```
+
+### CRISPR Simulator Validation
+
+CRISPR Simulator's core sequence logic is isolated in `crispr_logic.py` and verified with 19 pytest tests. The tests cover:
+
+- Reverse complement (basic, palindromic, empty input)
+- PAM detection (single hit, multiple hits, no hit, short sequence)
+- GC content calculation (0%, 50%, 100%)
+- Mismatch counting (identical, partial, all-different)
+- On-target classification (perfect match → cut, mismatch = 0)
+- Off-target classification (1 mismatch)
+- High-mismatch rejection (3+ mismatches → skipped)
+- GC content filtering (both lower and upper bounds)
+- No-PAM edge case
+
+Run with:
+
+```bash
+python -m pytest test_crispr.py -v
+```
+
+---
+
 ## Performance Benchmarks
 
 ### Test Environment
@@ -493,7 +537,7 @@ Advance-bio_code/
 | 5,000,000 | 50 sec | ~1.5 GB |
 | 10,000,000 | <2 min | ~1.9 GB |
 
-**Key Insight:** The bottleneck is Python object generation, not computational hardware. The pipeline is efficient enough for standard consumer hardware without requiring GPU acceleration or distributed computing.
+**Key Insight:** The bottleneck is Python object generation, not computational hardware. The pipeline is efficient enough for standard consumer hardware without requiring GPU acceleration or distribution.
 
 ---
 
